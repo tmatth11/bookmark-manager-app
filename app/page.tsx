@@ -1,7 +1,7 @@
 export default function HomePage() {
-  return (
-    <>
-        <p>HomePage works!</p>
-    </>
-  );
+    return (
+        <>
+            <p>HomePage works!</p>
+        </>
+    );
 }
