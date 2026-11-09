@@ -1,33 +1,69 @@
+"use client";
+
 import Logo from "@/app/_components/logo";
 import ModeToggle from "@/app/_components/mode-toggle";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Navbar() {
+    const [isLinksOpen, setIsLinksOpen] = useState(false);
+
     return (
-        <header className="border-b sticky top-0 z-50 bg-card w-full">
-            <div className="max-w-7xl px-4 py-4 sm:px-6 lg:px-8 mx-auto">
+        <header className="bg-card sticky top-0 z-50 w-full border-b">
+            <nav className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
                 {/* Top navbar */}
-                <nav className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                     <Logo />
                     <div className="flex items-center gap-4">
-                        <Link
-                            href="#"
-                            className="nav-link">Log In</Link>
-                        <Link
-                            href="#"
-                            className={buttonVariants({
-                                size: "lg",
-                                variant: "default",
-                                className: "text-base!"
-                            })}
-                        >
-                            Sign Up
-                        </Link>
+                        <div className="hidden items-center gap-4 md:flex">
+                            <Link href="#" className="link-hover">
+                                Log In
+                            </Link>
+                            <Link
+                                href="#"
+                                className={buttonVariants({
+                                    size: "lg",
+                                    variant: "default",
+                                    className: "text-base!",
+                                })}
+                            >
+                                Sign Up
+                            </Link>
+                        </div>
                         <ModeToggle />
+                        <button
+                            className="link-hover md:hidden"
+                            aria-label={
+                                isLinksOpen ? "Close menu" : "Expand menu"
+                            }
+                            title={isLinksOpen ? "Close menu" : "Expand menu"}
+                            onClick={() => setIsLinksOpen(!isLinksOpen)}
+                        >
+                            {isLinksOpen ? <X /> : <Menu />}
+                        </button>
                     </div>
+                </div>
+                {/* Bottom navbar */}
+                <nav
+                    className={`${isLinksOpen ? "flex" : "hidden"} mt-4 flex-col gap-2 md:hidden`}
+                >
+                    <Link href="#" className="link-hover">
+                        Log In
+                    </Link>
+                    <Link
+                        href="#"
+                        className={buttonVariants({
+                            size: "lg",
+                            variant: "default",
+                            className: "text-base!",
+                        })}
+                    >
+                        Sign Up
+                    </Link>
                 </nav>
-            </div>
+            </nav>
         </header>
     );
 }

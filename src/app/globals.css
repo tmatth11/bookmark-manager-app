@@ -132,7 +132,10 @@
 }
 
 @layer components {
-    .nav-link {
+}
+
+@layer utilities {
+    .link-hover {
         @apply hover:text-muted-foreground;
     }
 }
