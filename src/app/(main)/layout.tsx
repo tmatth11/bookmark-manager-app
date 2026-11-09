@@ -12,10 +12,14 @@ export const metadata: Metadata = {
     },
 };
 
-export default function HomeLayout({ children }: LayoutProps<"/">) {
+export default function MainLayout({ children }: LayoutProps<"/">) {
     return (
-        <html lang="en" className={cn("font-sans", inter.variable)}>
-            <body className="min-h-full flex flex-col">{children}</body>
+        <html lang="en">
+            <body
+                className={`${cn("font-sans", inter.variable)} min-h-dvh flex flex-col`}
+            >
+                {children}
+            </body>
         </html>
     );
 }
