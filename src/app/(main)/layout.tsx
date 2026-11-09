@@ -2,6 +2,7 @@ import "../globals.css";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
+import Navbar from "./_components/navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -18,6 +19,7 @@ export default function MainLayout({ children }: LayoutProps<"/">) {
             <body
                 className={`${cn("font-sans", inter.variable)} min-h-dvh flex flex-col antialiased`}
             >
+                <Navbar />
                 {children}
             </body>
         </html>
