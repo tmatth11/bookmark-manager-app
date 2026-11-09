@@ -16,7 +16,7 @@ export default function MainLayout({ children }: LayoutProps<"/">) {
     return (
         <html lang="en">
             <body
-                className={`${cn("font-sans", inter.variable)} min-h-dvh flex flex-col`}
+                className={`${cn("font-sans", inter.variable)} min-h-dvh flex flex-col antialiased`}
             >
                 {children}
             </body>
