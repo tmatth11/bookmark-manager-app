@@ -1,4 +1,5 @@
 import Logo from "@/app/_components/logo";
+import ModeToggle from "@/app/_components/mode-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -10,7 +11,9 @@ export default function Navbar() {
                 <nav className="flex items-center justify-between">
                     <Logo />
                     <div className="flex items-center gap-4">
-                        <Link href="#">Log In</Link>
+                        <Link
+                            href="#"
+                            className="nav-link">Log In</Link>
                         <Link
                             href="#"
                             className={buttonVariants({
@@ -21,6 +24,7 @@ export default function Navbar() {
                         >
                             Sign Up
                         </Link>
+                        <ModeToggle />
                     </div>
                 </nav>
             </div>

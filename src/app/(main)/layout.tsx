@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Navbar from "./_components/navbar";
+import { ThemeProvider } from "../_components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -15,12 +16,21 @@ export const metadata: Metadata = {
 
 export default function MainLayout({ children }: LayoutProps<"/">) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body
                 className={`${cn("font-sans", inter.variable)} min-h-dvh flex flex-col antialiased`}
             >
-                <Navbar />
-                {children}
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <Navbar />
+                    <main className="flex-1">
+                        {children}
+                    </main>
+                </ThemeProvider>
             </body>
         </html>
     );

@@ -130,3 +130,9 @@
     @apply font-sans;
     }
 }
+
+@layer components {
+    .nav-link {
+        @apply hover:text-muted-foreground;
+    }
+}
