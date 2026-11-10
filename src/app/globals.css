@@ -117,25 +117,32 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        @apply bg-background text-foreground;
     }
-  button:not(:disabled), [role="button"]:not(:disabled) {
-    cursor: pointer;
+
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
     }
-  html {
-    @apply font-sans;
+
+    html {
+        @apply font-sans;
     }
 }
 
-@layer components {
-}
+@layer components {}
 
 @layer utilities {
     .link-hover {
         @apply hover:text-muted-foreground;
+    }
+
+    .main-layout {
+        @apply mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8;
     }
 }

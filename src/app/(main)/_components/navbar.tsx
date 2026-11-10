@@ -2,7 +2,7 @@
 
 import Logo from "@/app/_components/logo";
 import ModeToggle from "@/app/_components/mode-toggle";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -18,11 +18,11 @@ export default function Navbar() {
                     <Logo />
                     <div className="flex items-center gap-4">
                         <div className="hidden items-center gap-4 md:flex">
-                            <Link href="#" className="link-hover">
+                            <Link href="/auth/login" className="link-hover">
                                 Log In
                             </Link>
                             <Link
-                                href="#"
+                                href="/auth/sign-up"
                                 className={buttonVariants({
                                     size: "lg",
                                     variant: "default",
@@ -49,11 +49,14 @@ export default function Navbar() {
                 <nav
                     className={`${isLinksOpen ? "flex" : "hidden"} mt-4 flex-col gap-2 md:hidden`}
                 >
-                    <Link href="#" className="link-hover">
+                    <Link 
+                        href="/auth/login" 
+                        className="link-hover"
+                    >
                         Log In
                     </Link>
                     <Link
-                        href="#"
+                        href="/auth/sign-up"
                         className={buttonVariants({
                             size: "lg",
                             variant: "default",
