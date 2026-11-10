@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Navbar from "./_components/navbar";
 import { ThemeProvider } from "../_components/theme-provider";
+import Footer from "../_components/footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -30,6 +31,7 @@ export default function MainLayout({ children }: LayoutProps<"/">) {
                     <main className="flex-1">
                         {children}
                     </main>
+                    <Footer />
                 </ThemeProvider>
             </body>
         </html>
