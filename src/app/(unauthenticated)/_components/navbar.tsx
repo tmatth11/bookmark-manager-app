@@ -10,12 +10,16 @@ import { useState } from "react";
 export default function Navbar() {
     const [isLinksOpen, setIsLinksOpen] = useState(false);
 
+    const handleLinksClose = () => {
+        setIsLinksOpen(false);
+    };
+
     return (
         <header className="bg-card sticky top-0 z-50 w-full border-b">
             <nav className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
                 {/* Top navbar */}
                 <div className="flex items-center justify-between">
-                    <Logo />
+                    <Logo onLinksClose={handleLinksClose} />
                     <div className="flex items-center gap-4">
                         <div className="hidden items-center gap-4 md:flex">
                             <Link href="/auth/login" className="link-hover">
@@ -52,6 +56,7 @@ export default function Navbar() {
                     <Link 
                         href="/auth/login" 
                         className="link-hover"
+                        onClick={handleLinksClose}
                     >
                         Log In
                     </Link>
@@ -62,6 +67,7 @@ export default function Navbar() {
                             variant: "default",
                             className: "text-base!",
                         })}
+                        onClick={handleLinksClose}
                     >
                         Sign Up
                     </Link>
