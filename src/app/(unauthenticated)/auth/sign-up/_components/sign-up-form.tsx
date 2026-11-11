@@ -80,7 +80,7 @@ export default function SignUpForm() {
 
             router.push("/bookmarks");
         } catch (error: unknown) {
-            handleError(error instanceof Error ? error.message : "An error occurred");
+            handleError(error instanceof Error ? `Error: ${error.message}.`: "An error occurred",);
         } finally {
             setIsLoading(false);
         }
