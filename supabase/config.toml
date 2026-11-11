@@ -5,6 +5,10 @@
 # working directory name when running `supabase init`.
 project_id = "bookmark-manager-app"
 
+[storage.buckets.avatar]
+
+[storage.buckets.bookmark_icon]
+
 [api]
 enabled = true
 # Port to use for the API URL.
