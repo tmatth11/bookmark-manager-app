@@ -135,7 +135,11 @@
     }
 }
 
-@layer components {}
+@layer components {
+    .form-error {
+        @apply text-destructive wrap-break-word text-center;
+    }
+}
 
 @layer utilities {
     .link-hover {
@@ -143,6 +147,6 @@
     }
 
     .main-layout {
-        @apply mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8;
+        @apply mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8;
     }
 }
