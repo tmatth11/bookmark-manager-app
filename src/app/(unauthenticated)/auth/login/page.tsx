@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import LoginForm from "./_components/login-form";
 
 export const metadata: Metadata = {
     title: "Log In",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 export default function LoginPage() {
     return (
         <div className="main-layout">
-            <p>LoginPage works!</p>
+            <div className="flex flex-col items-center">
+                <LoginForm />
+            </div>
         </div>
     );
 }
