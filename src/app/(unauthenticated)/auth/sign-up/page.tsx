@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import SignUpForm from "./_components/sign-up-form";
 
 export const metadata: Metadata = {
     title: "Sign Up",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
     return (
         <div className="main-layout">
-            <p>SignUpPage works!</p>
+            <div className="flex flex-col items-center">
+                <SignUpForm />
+            </div>
         </div>
     );
 }
