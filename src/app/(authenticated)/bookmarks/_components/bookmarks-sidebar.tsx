@@ -1,6 +1,7 @@
 "use client";
 
 import Logo from "@/app/_components/logo";
+import { Button } from "@/components/ui/button";
 import {
     Sidebar,
     SidebarContent,
@@ -11,8 +12,9 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from "@/components/ui/sidebar";
-import { Archive, House } from "lucide-react";
+import { Archive, House, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -22,6 +24,7 @@ export default function BookmarksSideBar({
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
+    const { setOpenMobile } = useSidebar();
 
     const isArchived = searchParams.get("archived") === "true";
 
@@ -36,7 +39,18 @@ export default function BookmarksSideBar({
     return (
         <Sidebar {...props}>
             <SidebarHeader>
-                <Logo path="/bookmarks" />
+                <div className="flex justify-between gap-2">
+                    <Logo path="/bookmarks" />
+                    <Button
+                        variant="ghost"
+                        className="md:hidden"
+                        aria-label="Close sidebar"
+                        title="Close sidebar"
+                        onClick={() => setOpenMobile(false)}
+                    >
+                        <X />
+                    </Button>
+                </div>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarMenu>
