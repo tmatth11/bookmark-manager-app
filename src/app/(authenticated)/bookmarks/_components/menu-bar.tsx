@@ -8,7 +8,7 @@ import { Suspense } from "react";
 
 export default function MenuBar() {
     return (
-        <div className="bg-card flex items-center justify-between p-4 gap-2">
+        <div className="bg-card flex items-center justify-between p-4 gap-2 border-b">
             <div className="flex items-center gap-2">
                 <MobileSidebarTrigger />
                 <TitleSearch />
