@@ -29,6 +29,8 @@ export default function BookmarksSideBar({
     const isArchived = searchParams.get("archived") === "true";
 
     const handleArchive = () => {
+        handleSidebarClose();
+
         const params = new URLSearchParams(searchParams.toString());
 
         params.set("archived", "true");
@@ -36,17 +38,24 @@ export default function BookmarksSideBar({
         router.push(`${pathname}?${params.toString()}`);
     };
 
+    const handleSidebarClose = () => {
+        setOpenMobile(false);
+    };
+
     return (
         <Sidebar {...props}>
             <SidebarHeader>
                 <div className="flex justify-between gap-2">
-                    <Logo path="/bookmarks" />
+                    <Logo 
+                        path="/bookmarks" 
+                        onSidebarClose={handleSidebarClose}
+                    />
                     <Button
                         variant="ghost"
                         className="md:hidden"
                         aria-label="Close sidebar"
                         title="Close sidebar"
-                        onClick={() => setOpenMobile(false)}
+                        onClick={handleSidebarClose}
                     >
                         <X />
                     </Button>
@@ -58,6 +67,7 @@ export default function BookmarksSideBar({
                         <SidebarMenuButton
                             isActive={!isArchived}
                             render={<Link href="/bookmarks" />}
+                            onClick={handleSidebarClose}
                         >
                             <House />
                             <span>Home</span>
