@@ -2,9 +2,9 @@ import ModeToggle from "@/app/_components/mode-toggle";
 import AddBookmarkButton from "./add-bookmark-button";
 import MobileSidebarTrigger from "./mobile-sidebar-trigger";
 import TitleSearch from "./title-search";
-import UserAvatar from "./user-avatar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Suspense } from "react";
+import UserAvatarDropdown from "./user-avatar-dropdown";
 
 export default function MenuBar() {
     return (
@@ -22,7 +22,7 @@ export default function MenuBar() {
                         </Avatar>
                     }
                 >
-                    <UserAvatar />
+                    <UserAvatarDropdown />
                 </Suspense>
                 <ModeToggle />
             </div>
