@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { Bookmark } from "lucide-react";
 
-export default function Logo({ onLinksClose }: { onLinksClose?: () => void }) {
+export default function Logo({ onLinksClose, path }: { 
+    onLinksClose?: () => void;
+    path: string; 
+}) {
     return (
         <Link
-            href="/"
+            href={path}
             className="link-hover flex items-center gap-2"
             onClick={onLinksClose}
         >
