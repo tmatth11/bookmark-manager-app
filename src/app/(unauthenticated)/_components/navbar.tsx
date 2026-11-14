@@ -19,7 +19,7 @@ export default function Navbar() {
             <nav className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
                 {/* Top navbar */}
                 <div className="flex items-center justify-between">
-                    <Logo onLinksClose={handleLinksClose} />
+                    <Logo onLinksClose={handleLinksClose} path="/" />
                     <div className="flex items-center gap-4">
                         <div className="hidden items-center gap-4 md:flex">
                             <Link href="/auth/login" className="link-hover">

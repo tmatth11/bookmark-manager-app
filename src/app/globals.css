@@ -139,6 +139,10 @@
     .form-error {
         @apply text-destructive wrap-break-word text-center;
     }
+
+    .top-bar {
+        @apply bg-card p-4 border-b;
+    }
 }
 
 @layer utilities {
