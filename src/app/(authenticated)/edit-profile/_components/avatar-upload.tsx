@@ -18,6 +18,8 @@ export default function AvatarUpload({ profile }: { profile: Profile }) {
     const [previousAvatarPath, setPreviousAvatarPath] = useState<string | null>(
         profile?.avatar_path || null,
     );
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const supabase = createClient();
@@ -59,13 +61,18 @@ export default function AvatarUpload({ profile }: { profile: Profile }) {
 
             setPreviousAvatarPath(filePath);
             setAvatarUrl(data.signedUrl);
+            setErrorMessage(null);
         } catch (error) {
-            const errorMessage =
+            const uploadErrorMessage =
                 error instanceof Error
                     ? error.message
                     : "An unknown database error occurred";
 
-            console.error("Error uploading image:", errorMessage);
+            setErrorMessage(`Error uploading image: ${uploadErrorMessage}`);
+
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 3000);
         } finally {
             setUploading(false);
         }
@@ -96,6 +103,7 @@ export default function AvatarUpload({ profile }: { profile: Profile }) {
                             disabled={uploading}
                             className="hidden"
                         />
+                        {errorMessage && <p className="form-error">{errorMessage}</p>}
                     </>
                 )}
             </div>
