@@ -88,6 +88,7 @@ export default function LoginForm() {
                             <Input
                                 id="email"
                                 type="email"
+                                value={email}
                                 placeholder="Enter email"
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -98,6 +99,7 @@ export default function LoginForm() {
                             <Input
                                 id="password"
                                 type="password"
+                                value={password}
                                 placeholder="Enter password"
                                 onChange={(e) => setPassword(e.target.value)}
                                 required

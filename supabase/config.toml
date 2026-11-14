@@ -8,6 +8,7 @@ project_id = "bookmark-manager-app"
 [storage.buckets.avatar]
 
 [storage.buckets.bookmark_icon]
+public = true
 
 [api]
 enabled = true
