@@ -19,7 +19,7 @@ export default async function BookmarksPage({
     return (
         <div className="mx-auto w-full max-w-[1920px]">
             <SidebarProvider>
-                <BookmarksSideBar className="relative border-r" />
+                <BookmarksSideBar className="relative border-r h-full" />
                 <div className="w-full">
                     <MenuBar />
                     <BookmarksView isArchived={isArchived} />

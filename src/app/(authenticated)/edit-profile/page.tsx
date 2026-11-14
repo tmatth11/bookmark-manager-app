@@ -1,13 +1,13 @@
 import Footer from "@/app/_components/footer";
 import TopBar from "../_components/top-bar";
+import EditProfileView from "./_components/edit-profile-view";
 
 export default function EditProfilePage() {
     return (
-        <div className="mx-auto w-full max-w-[1920px]">
-            <div className="w-full">
-                <TopBar />
-            </div>
+        <>
+            <TopBar />
+            <EditProfileView />
             <Footer />
-        </div>
+        </>
     );
 }
