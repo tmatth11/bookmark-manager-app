@@ -5,4 +5,9 @@ export type Profile = {
         id: string;
         updated_at: string;
         username: string;
-} | null;
+};
+
+export interface UpdateUsernameState {
+    error?: string;
+    success?: boolean;
+}

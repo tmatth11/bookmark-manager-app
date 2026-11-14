@@ -102,6 +102,7 @@ export default function SignUpForm() {
                             <Input
                                 id="email"
                                 type="email"
+                                value={email}
                                 placeholder="Enter email"
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -112,6 +113,7 @@ export default function SignUpForm() {
                             <Input
                                 id="username"
                                 type="text"
+                                value={username}
                                 placeholder="Enter username"
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
@@ -122,6 +124,7 @@ export default function SignUpForm() {
                             <Input
                                 id="password"
                                 type="password"
+                                value={password}
                                 placeholder="Enter password"
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
@@ -134,6 +137,7 @@ export default function SignUpForm() {
                             <Input
                                 id="confirm-password"
                                 type="password"
+                                value={confirmPassword}
                                 placeholder="Confirm password"
                                 onChange={(e) =>
                                     setConfirmPassword(e.target.value)

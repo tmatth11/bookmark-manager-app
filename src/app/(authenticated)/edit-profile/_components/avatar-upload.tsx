@@ -8,10 +8,7 @@ import { Profile } from "@/types";
 import { useRef, useState } from "react";
 
 export default function AvatarUpload({ profile }: { profile: Profile }) {
-    let avatarFallback = "?";
-    if (profile) {
-        avatarFallback = profile.username[0].toUpperCase();
-    }
+    const avatarFallback = profile.username[0].toUpperCase();
 
     const [uploading, setUploading] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || null);
@@ -61,7 +58,6 @@ export default function AvatarUpload({ profile }: { profile: Profile }) {
 
             setPreviousAvatarPath(filePath);
             setAvatarUrl(data.signedUrl);
-            setErrorMessage(null);
         } catch (error) {
             const uploadErrorMessage =
                 error instanceof Error
