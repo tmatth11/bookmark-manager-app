@@ -13,18 +13,18 @@ const nextConfig: NextConfig = {
         },
     },
     images: {
-        dangerouslyAllowLocalIP: true,
+        dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
         remotePatterns: [
             {
                 protocol: "http",
                 hostname: "127.0.0.1",
                 port: "54321",
-                pathname: "/storage/v1/object/public/**",
+                pathname: "/storage/v1/object/sign/**",
             },
             {
                 protocol: "https",
                 hostname: "*.supabase.co",
-                pathname: "/storage/v1/object/public/**",
+                pathname: "/storage/v1/object/sign/**",
             },
         ],
     },

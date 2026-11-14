@@ -1,6 +1,6 @@
 "use client";
 
-import { updateAvatarUrl } from "@/actions/profile-actions";
+import { updateAvatarPath } from "@/actions/profile-actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/services/supabase/client";
@@ -9,14 +9,17 @@ import { useRef, useState } from "react";
 
 export default function AvatarUpload({ profile }: { profile: Profile }) {
     let avatarFallback = "?";
-    const previousAvatarUrl = profile?.avatar_url || null;
     if (profile) {
         avatarFallback = profile.username[0].toUpperCase();
     }
 
     const [uploading, setUploading] = useState(false);
-    const [avatarUrl, setAvatarUrl] = useState(previousAvatarUrl);
+    const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || null);
+    const [previousAvatarPath, setPreviousAvatarPath] = useState<string | null>(
+        profile?.avatar_path || null,
+    );
     const fileInputRef = useRef<HTMLInputElement>(null);
+
     const supabase = createClient();
 
     const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,12 +47,18 @@ export default function AvatarUpload({ profile }: { profile: Profile }) {
                 throw uploadError;
             }
 
-            const { data } = supabase.storage
+            await updateAvatarPath(filePath, previousAvatarPath);
+
+            const { data, error: signError } = await supabase.storage
                 .from("avatar")
-                .getPublicUrl(filePath);
-            
-            await updateAvatarUrl(data.publicUrl, previousAvatarUrl);
-            setAvatarUrl(data.publicUrl);
+                .createSignedUrl(filePath, 3600);
+
+            if (signError) {
+                throw signError;
+            }
+
+            setPreviousAvatarPath(filePath);
+            setAvatarUrl(data.signedUrl);
         } catch (error) {
             const errorMessage =
                 error instanceof Error
