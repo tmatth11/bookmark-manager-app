@@ -1,7 +1,7 @@
 import { fetchCurrentProfile } from "@/lib/queries/profile";
 import { connection } from "next/server";
 import AvatarUpload from "./avatar-upload";
-import UpdateUsername from "./update-username";
+import UpdateUsernameWrapper from "./update-username-wrapper";
 
 export const instant = false;
 
@@ -15,7 +15,7 @@ export default async function EditProfileForm() {
             {profile && (
                 <>
                     <AvatarUpload profile={profile} />
-                    <UpdateUsername key={profile.id} profile={profile} />
+                    <UpdateUsernameWrapper profile={profile} />
                 </>
             )}
         </div>
