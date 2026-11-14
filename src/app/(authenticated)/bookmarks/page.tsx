@@ -20,10 +20,10 @@ export default async function BookmarksPage({
         <div className="mx-auto w-full max-w-[1920px]">
             <SidebarProvider>
                 <BookmarksSideBar className="relative border-r" />
-                <main className="w-full">
+                <div className="w-full">
                     <MenuBar />
                     <BookmarksView isArchived={isArchived} />
-                </main>
+                </div>
             </SidebarProvider>
             <Footer />
         </div>

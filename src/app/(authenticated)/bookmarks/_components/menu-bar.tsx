@@ -4,11 +4,11 @@ import MobileSidebarTrigger from "./mobile-sidebar-trigger";
 import TitleSearch from "./title-search";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Suspense } from "react";
-import UserAvatarDropdown from "./user-avatar-dropdown";
+import UserAvatarDropdown from "../../_components/user-avatar-dropdown";
 
 export default function MenuBar() {
     return (
-        <div className="bg-card flex items-center justify-between p-4 gap-2 border-b">
+        <header className="top-bar">
             <div className="flex items-center gap-2">
                 <MobileSidebarTrigger />
                 <TitleSearch />
@@ -26,6 +26,6 @@ export default function MenuBar() {
                 </Suspense>
                 <ModeToggle />
             </div>
-        </div>
+        </header>
     );
 }

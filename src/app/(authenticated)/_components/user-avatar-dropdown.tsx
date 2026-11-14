@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fetchCurrentProfile } from "@/lib/queries/profile";
 import { connection } from "next/server";
-import UserAvatarImage from "./user-avatar-image";
 import Link from "next/link";
 import LogOutButton from "./log-out-button";
+import UserAvatarImage from "./user-avatar-image";
 
 export const instant = false;
 
