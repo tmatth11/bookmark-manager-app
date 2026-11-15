@@ -12,6 +12,7 @@ export default function TopBar() {
                 <Link
                     href="/bookmarks"
                     className="link-hover flex items-center gap-2"
+                    title="Back to home"
                 >
                     <ChevronLeft />
                     <span>Back</span>
