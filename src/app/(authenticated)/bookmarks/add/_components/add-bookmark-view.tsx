@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import AddBookmarkForm from "./add-bookmark-form";
+import AddBookmarkFormWrapper from "./add-bookmark-form-wrapper";
 
 export default function AddBookmarkView() {
     return (
@@ -8,7 +8,7 @@ export default function AddBookmarkView() {
                 <h3 className="text-xl font-semibold">Add Bookmark</h3>
                 <p>Fill out the form below to add a bookmark.</p>
                 <Suspense fallback={<p className="mt-4">Loading...</p>}>
-                    <AddBookmarkForm />
+                    <AddBookmarkFormWrapper />
                 </Suspense>
             </div>
         </main>
