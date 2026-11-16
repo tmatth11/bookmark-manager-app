@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { fetchMetadata } from "@/lib/queries/bookmark";
@@ -49,7 +48,7 @@ export default function AddBookmarkForm() {
         }
 
         if (!metadata) {
-            handleMetadataError("Error: No metadata found.");
+            handleMetadataError("Warning: No metadata found.");
 
             return;
         }
@@ -105,6 +104,7 @@ export default function AddBookmarkForm() {
                     </FieldLabel>
                     <Input
                         id="page-url"
+                        name="page-url"
                         type="text"
                         value={pageUrl}
                         placeholder="Enter page URL"
@@ -184,6 +184,7 @@ export default function AddBookmarkForm() {
                         onChange={(e) => setNewTag(e.target.value)}
                         onKeyDown={handleEnterTag}
                     />
+                    <FieldDescription>Tags are optional.</FieldDescription>
                 </Field>
                 <Field>
                     <Button
@@ -194,9 +195,8 @@ export default function AddBookmarkForm() {
                     >
                         Add new tag
                     </Button>
-                    <FieldDescription>Tags are optional.</FieldDescription>
                     <ScrollArea
-                        className={"bg-card mt-2 rounded-md border p-2"}
+                        className={"bg-card mt-2 h-70 rounded-md border p-2"}
                     >
                         <p className="mb-4 text-sm font-bold">Tags</p>
                         {tags.size === 0 ? (
@@ -214,7 +214,13 @@ export default function AddBookmarkForm() {
                                         value={tag}
                                         aria-label={`Remove ${tag} tag`}
                                         className="h-auto min-h-9 max-w-full min-w-0 gap-1.5 py-1.5 text-left whitespace-normal"
+                                        title="Remove tag"
                                     >
+                                        <Input
+                                            type="hidden"
+                                            name="tags"
+                                            value={tag}
+                                        />
                                         <span className="min-w-0 break-all">
                                             {tag}
                                         </span>
@@ -228,7 +234,9 @@ export default function AddBookmarkForm() {
                 <Field>
                     <Button
                         type="submit"
-                        disabled={pageUrl === "" || title === ""}
+                        disabled={
+                            pageUrl === "" || title === "" || metadataLoading
+                        }
                     >
                         Submit
                     </Button>

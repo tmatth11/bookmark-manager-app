@@ -40,7 +40,7 @@ export async function fetchMetadata(targetUrl: string) {
             "/favicon.ico";
 
         // Assemble full icon URL
-        if (icon && !icon.startsWith("http")) {
+        if (icon) {
             icon = new URL(icon, targetUrl).href;
         }
 
