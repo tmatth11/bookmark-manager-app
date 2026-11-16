@@ -8,17 +8,24 @@ import {
     FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { fetchMetadata } from "@/lib/queries/bookmark";
+import { X } from "lucide-react";
+import React from "react";
 import { useState } from "react";
 
 export default function AddBookmarkForm() {
-    const [pageUrl, setPageUrl] = useState("");
+    const [pageUrl, setPageUrl] = useState<string>("");
     const [metadataError, setMetadataError] = useState<string | null>(null);
     const [metadataLoading, setMetadataLoading] = useState(false);
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [iconUrl, setIconUrl] = useState<string>("");
+    const [newTag, setNewTag] = useState<string>("");
+    const [tags, setTags] = useState<Set<string>>(new Set());
 
     const handleMetadataError = (errorMessage: string) => {
         setMetadataError(errorMessage);
@@ -56,8 +63,41 @@ export default function AddBookmarkForm() {
         setMetadataLoading(false);
     };
 
+    const handleEnterMetadata = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleMetadata();
+        }
+    };
+
+    const handleNewTag = () => {
+        const formattedTag = newTag.trim().toLowerCase();
+
+        if (!formattedTag) {
+            setNewTag("");
+
+            return;
+        }
+
+        setTags((prev) => new Set(prev).add(formattedTag));
+        setNewTag("");
+    };
+
+    const handleEnterTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleNewTag();
+        }
+    };
+
+    const handleRemoveTag = (updatedTags: string[]) => {
+        setTags(new Set(updatedTags));
+    };
+
+    const tagsArray = Array.from(tags);
+
     return (
-        <form className="mt-4 max-w-md">
+        <form className="mt-4 w-full max-w-md">
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="page-url">
@@ -69,6 +109,7 @@ export default function AddBookmarkForm() {
                         value={pageUrl}
                         placeholder="Enter page URL"
                         onChange={(e) => setPageUrl(e.target.value)}
+                        onKeyDown={handleEnterMetadata}
                         required
                     />
                 </Field>
@@ -92,9 +133,7 @@ export default function AddBookmarkForm() {
                     </FieldDescription>
                 </Field>
                 <Field>
-                    <FieldLabel htmlFor="title">
-                        Page Title
-                    </FieldLabel>
+                    <FieldLabel htmlFor="title">Page title</FieldLabel>
                     <Input
                         id="title"
                         name="title"
@@ -107,7 +146,7 @@ export default function AddBookmarkForm() {
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="description">
-                        Page Description
+                        Page description
                     </FieldLabel>
                     <Textarea
                         id="description"
@@ -116,11 +155,12 @@ export default function AddBookmarkForm() {
                         placeholder="Enter page description"
                         onChange={(e) => setDescription(e.target.value)}
                     />
+                    <FieldDescription>
+                        Page description is optional.
+                    </FieldDescription>
                 </Field>
                 <Field>
-                    <FieldLabel htmlFor="icon-url">
-                        Page Icon URL
-                    </FieldLabel>
+                    <FieldLabel htmlFor="icon-url">Page icon URL</FieldLabel>
                     <Input
                         id="icon-url"
                         name="icon-url"
@@ -129,6 +169,69 @@ export default function AddBookmarkForm() {
                         placeholder="Enter page icon URL"
                         onChange={(e) => setIconUrl(e.target.value)}
                     />
+                    <FieldDescription>
+                        Page icon URL is optional.
+                    </FieldDescription>
+                </Field>
+                <Field>
+                    <FieldLabel htmlFor="new-tag">New tag</FieldLabel>
+                    <Input
+                        id="new-tag"
+                        name="new-tag"
+                        type="text"
+                        value={newTag}
+                        placeholder="Enter new tag"
+                        onChange={(e) => setNewTag(e.target.value)}
+                        onKeyDown={handleEnterTag}
+                    />
+                </Field>
+                <Field>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        disabled={newTag === ""}
+                        onClick={handleNewTag}
+                    >
+                        Add new tag
+                    </Button>
+                    <FieldDescription>Tags are optional.</FieldDescription>
+                    <ScrollArea
+                        className={"bg-card mt-2 rounded-md border p-2"}
+                    >
+                        <p className="mb-4 text-sm font-bold">Tags</p>
+                        {tags.size === 0 ? (
+                            <p className="text-sm">No tags added yet.</p>
+                        ) : (
+                            <ToggleGroup
+                                className="flex w-full flex-wrap justify-start gap-2"
+                                multiple
+                                value={tagsArray}
+                                onValueChange={handleRemoveTag}
+                            >
+                                {tagsArray.map((tag) => (
+                                    <ToggleGroupItem
+                                        key={tag}
+                                        value={tag}
+                                        aria-label={`Remove ${tag} tag`}
+                                        className="h-auto min-h-9 max-w-full min-w-0 gap-1.5 py-1.5 text-left whitespace-normal"
+                                    >
+                                        <span className="min-w-0 break-all">
+                                            {tag}
+                                        </span>
+                                        <X className="text-muted-foreground h-3.5 w-3.5 shrink-0" />
+                                    </ToggleGroupItem>
+                                ))}
+                            </ToggleGroup>
+                        )}
+                    </ScrollArea>
+                </Field>
+                <Field>
+                    <Button
+                        type="submit"
+                        disabled={pageUrl === "" || title === ""}
+                    >
+                        Submit
+                    </Button>
                 </Field>
             </FieldGroup>
         </form>
