@@ -1,5 +1,6 @@
 "use client";
 
+import { addBookmark } from "@/actions/bookmark-actions";
 import { Button } from "@/components/ui/button";
 import {
     Field,
@@ -13,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { fetchMetadata } from "@/lib/queries/bookmark";
 import { X } from "lucide-react";
-import React from "react";
+import React, { useActionState } from "react";
 import { useState } from "react";
 
 export default function AddBookmarkForm() {
@@ -25,6 +26,8 @@ export default function AddBookmarkForm() {
     const [iconUrl, setIconUrl] = useState<string>("");
     const [newTag, setNewTag] = useState<string>("");
     const [tags, setTags] = useState<Set<string>>(new Set());
+
+    const [state, formAction, isPending] = useActionState(addBookmark, null);
 
     const handleMetadataError = (errorMessage: string) => {
         setMetadataError(errorMessage);
@@ -96,7 +99,8 @@ export default function AddBookmarkForm() {
     const tagsArray = Array.from(tags);
 
     return (
-        <form className="mt-4 w-full max-w-md">
+        <form action={formAction} className="mt-4 w-full max-w-md">
+            {state?.errorMessage && <p className="form-error mb-2">{state.errorMessage}</p>}
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="page-url">
@@ -112,12 +116,13 @@ export default function AddBookmarkForm() {
                         onKeyDown={handleEnterMetadata}
                         required
                     />
+                    {state?.errors?.pageUrl?.[0] && <p className="form-error">{state.errors.pageUrl[0]}</p>}
                 </Field>
                 <Field>
                     <Button
                         type="button"
                         variant="outline"
-                        disabled={metadataLoading || pageUrl === ""}
+                        disabled={metadataLoading || pageUrl === "" || isPending}
                         onClick={handleMetadata}
                     >
                         {metadataLoading
@@ -143,6 +148,7 @@ export default function AddBookmarkForm() {
                         onChange={(e) => setTitle(e.target.value)}
                         required
                     />
+                    {state?.errors?.title?.[0] && <p className="form-error">{state.errors.title[0]}</p>}
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="description">
@@ -158,6 +164,7 @@ export default function AddBookmarkForm() {
                     <FieldDescription>
                         Page description is optional.
                     </FieldDescription>
+                    {state?.errors?.description?.[0] && <p className="form-error">{state.errors.description[0]}</p>}
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="icon-url">Page icon URL</FieldLabel>
@@ -172,6 +179,7 @@ export default function AddBookmarkForm() {
                     <FieldDescription>
                         Page icon URL is optional.
                     </FieldDescription>
+                    {state?.errors?.iconUrl?.[0] && <p className="form-error">{state.errors.iconUrl[0]}</p>}
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="new-tag">New tag</FieldLabel>
@@ -185,12 +193,13 @@ export default function AddBookmarkForm() {
                         onKeyDown={handleEnterTag}
                     />
                     <FieldDescription>Tags are optional.</FieldDescription>
+                    {state?.errors?.tags?.[0] && <p className="form-error">{state.errors.tags[0]}</p>}
                 </Field>
                 <Field>
                     <Button
                         type="button"
                         variant="outline"
-                        disabled={newTag === ""}
+                        disabled={newTag === "" || isPending}
                         onClick={handleNewTag}
                     >
                         Add new tag
@@ -235,7 +244,7 @@ export default function AddBookmarkForm() {
                     <Button
                         type="submit"
                         disabled={
-                            pageUrl === "" || title === "" || metadataLoading
+                            pageUrl === "" || title === "" || metadataLoading || isPending
                         }
                     >
                         Submit

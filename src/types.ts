@@ -12,7 +12,7 @@ export interface UpdateUsernameState {
     success?: boolean;
 }
 
-export interface AddBookmarkState {
+export type AddBookmarkState = {
     errors?: {
         pageUrl?: string[];
         title?: string[];
@@ -21,4 +21,4 @@ export interface AddBookmarkState {
         tags?: string[];
     },
     errorMessage?: string;
-}
+} | null;

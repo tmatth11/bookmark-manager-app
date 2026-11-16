@@ -77,6 +77,7 @@ export async function addBookmark(
         };
     }
 
+    // Exit early if there are no tags to add
     if (validatedFields.data.tags.length === 0) {
         revalidatePath("/bookmarks");
         redirect("/bookmarks");
