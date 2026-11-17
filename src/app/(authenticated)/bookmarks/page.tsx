@@ -50,7 +50,7 @@ export default async function BookmarksPage({
                     <MenuBar />
                     <main className="bg-secondary flex min-h-dvh flex-col px-4 py-8 sm:px-6 lg:px-8">
                         <BookmarksViewHeader isArchived={isArchived} />
-                        {errorMessage !== null || totalPages !== null ? (
+                        {errorMessage !== null || totalPages === null ? (
                             <p className="form-error">
                                 {errorMessage}
                             </p>

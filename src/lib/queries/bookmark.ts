@@ -87,14 +87,18 @@ export async function getBookmarksPages(
         };
     }
 
+    const selectClause = tags.length > 0 ?
+        "id, bookmark_tag!inner(tag!inner(name))"
+        : "*";
+
     let bookmarkPagesQuery = supabase
         .from("bookmark")
-        .select("*", { count: "exact", head: true })
+        .select(selectClause, { count: "exact", head: true })
         .eq("user_id", user.id)
         .eq("is_archived", isArchived);
 
     if (tags.length > 0) {
-        bookmarkPagesQuery = bookmarkPagesQuery.in("tag", tags);
+        bookmarkPagesQuery = bookmarkPagesQuery.in("bookmark_tag.tag.name", tags);
     }
 
     if (query !== "") {
