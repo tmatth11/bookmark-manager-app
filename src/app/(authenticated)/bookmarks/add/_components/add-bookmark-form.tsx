@@ -56,9 +56,6 @@ export default function AddBookmarkForm() {
             return;
         }
 
-        console.log(
-            `Title: ${metadata.title}, Description: ${metadata.description}, Icon URL: ${metadata.iconUrl}`,
-        );
         setTitle(metadata.title);
         setDescription(metadata.description);
         setIconUrl(metadata.iconUrl);

@@ -17,6 +17,7 @@ import {
 import { Archive, House, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import TagList from "./tag-list";
 
 export default function BookmarksSideBar({
     ...props
@@ -85,7 +86,7 @@ export default function BookmarksSideBar({
                 <SidebarGroup>
                     <SidebarGroupLabel>TAGS</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        {/* TODO: Render tags */}
+                        <TagList />
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>

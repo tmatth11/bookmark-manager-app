@@ -22,3 +22,9 @@ export type AddBookmarkState = {
     },
     errorMessage?: string;
 } | null;
+
+export interface Tag {
+    id: string;
+    name: string;
+    count: number;
+}
