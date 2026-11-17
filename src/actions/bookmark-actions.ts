@@ -19,9 +19,6 @@ const addBookmarkSchema = z.object({
         .pipe(z.url("Please enter a valid URL.")),
     title: z.string().trim().min(1, "Title cannot be empty."),
     description: convertEmptyToNull,
-    iconUrl: convertEmptyToNull.pipe(
-        z.url("Please enter a valid icon URL.").nullable(),
-    ),
     tags: z.array(z.string().trim().min(1)),
 });
 
@@ -47,7 +44,6 @@ export async function addBookmark(
         pageUrl: formData.get("page-url"),
         title: formData.get("title"),
         description: formData.get("description"),
-        iconUrl: formData.get("icon-url"),
         tags: formData.getAll("tags"),
     });
 
@@ -65,8 +61,7 @@ export async function addBookmark(
             user_id: user.id,
             page_url: validatedFields.data.pageUrl,
             title: validatedFields.data.title,
-            description: validatedFields.data.description,
-            icon_url: validatedFields.data.iconUrl,
+            description: validatedFields.data.description
         })
         .select()
         .single();

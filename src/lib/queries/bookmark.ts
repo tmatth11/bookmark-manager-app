@@ -33,23 +33,10 @@ export async function fetchMetadata(targetUrl: string) {
             $('meta[name="description"]').attr("content") ||
             "";
 
-        // Extract icon
-        let icon =
-            $('link[rel="apple-touch-icon"]').attr("href") ||
-            $('link[rel="icon"]').attr("href") ||
-            $('link[rel="shortcut icon"]').attr("href") ||
-            "/favicon.ico";
-
-        // Assemble full icon URL
-        if (icon) {
-            icon = new URL(icon, targetUrl).href;
-        }
-
         return {
             data: {
                 title: title.trim(),
                 description: description.trim(),
-                iconUrl: icon,
             },
             error: null,
         };
@@ -159,7 +146,6 @@ export async function getBookmarks(
                       page_url,
                       title,
                       description,
-                      icon_url,
                       visited_at,
                       visits,
                       is_pinned,
@@ -175,7 +161,6 @@ export async function getBookmarks(
                   page_url,
                   title,
                   description,
-                  icon_url,
                   visited_at,
                   visits,
                   is_pinned,
@@ -229,19 +214,37 @@ export async function getBookmarks(
         };
     }
 
-    const formattedBookmarks = bookmarks.map((bookmark) => ({
-        id: bookmark.id,
-        createdAt: bookmark.created_at,
-        pageUrl: bookmark.page_url,
-        title: bookmark.title,
-        description: bookmark.description,
-        iconUrl: bookmark.icon_url,
-        visitedAt: bookmark.visited_at,
-        visits: bookmark.visits,
-        isPinned: bookmark.is_pinned,
-        tags: bookmark.all_tags
-            .map((bt) => bt.tag)
-            .filter((tag): tag is { id: string; name: string } => tag !== null),
+    
+    const formattedBookmarks = await Promise.all(bookmarks.map(async (bookmark) => {
+        let iconUrl =
+            "https://www.google.com/s2/favicons?domain=" +
+            encodeURIComponent(bookmark.page_url) +
+            "&sz=128";
+
+        try {
+            const response = await fetch(iconUrl);
+
+            if (!response.ok && response.status !== 404) {
+                iconUrl = "/blank-image.jpg";
+            }
+        } catch {
+            iconUrl = "/blank-image.jpg";
+        }
+
+        return {
+            id: bookmark.id,
+            createdAt: bookmark.created_at,
+            pageUrl: bookmark.page_url,
+            title: bookmark.title,
+            description: bookmark.description,
+            iconUrl: iconUrl,
+            visitedAt: bookmark.visited_at,
+            visits: bookmark.visits,
+            isPinned: bookmark.is_pinned,
+            tags: bookmark.all_tags
+                .map((bt) => bt.tag)
+                .filter((tag): tag is { id: string; name: string } => tag !== null),
+        }
     }));
 
     return {

@@ -1,4 +1,5 @@
 import { getBookmarks } from "@/lib/queries/bookmark";
+import BookmarkCard from "./bookmark-card";
 
 export default async function BookmarksList({
     isArchived,
@@ -13,31 +14,35 @@ export default async function BookmarksList({
     currentPage: number;
     tags: string[];
 }) {
-    const { data: bookmarks, errorMessage: bookmarksError } = await getBookmarks(
-        isArchived,
-        sortBy,
-        query,
-        currentPage,
-        tags,
-    );
+    const { data: bookmarks, errorMessage: bookmarksError } =
+        await getBookmarks(isArchived, sortBy, query, currentPage, tags);
 
     if (bookmarksError || !bookmarks) {
         return (
-            <p className="form-error w-full">An error occurred while fetching bookmarks.</p>
+            <p className="form-error w-full">
+                An error occurred while fetching bookmarks.
+            </p>
         );
     }
 
     if (bookmarks.length === 0) {
         return (
-            <p className="text-center w-full">There are no bookmarks to display.</p>
-        )
+            <p className="w-full text-center">
+                There are no bookmarks to display.
+            </p>
+        );
     }
 
     return (
-        <div className="w-full">
-            {bookmarks.map((bookmark) => (
-                <p key={bookmark.id}>Bookmark</p>
-            ))}
+        <div className="flex flex-col justify-center">
+            <div className="grid auto-rows-fr grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {bookmarks.map((bookmark) => (
+                    <BookmarkCard 
+                        key={bookmark.id}
+                        bookmark={bookmark}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

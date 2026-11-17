@@ -49,12 +49,10 @@ export default async function BookmarksPage({
                 <BookmarksSideBar className="relative h-full border-r" />
                 <div className="w-full">
                     <MenuBar />
-                    <main className="bg-secondary flex min-h-dvh flex-col px-4 py-8 sm:px-6 lg:px-8">
+                    <main className="bg-secondary flex min-h-dvh flex-col px-2 py-8 md:px-4 lg:px-6">
                         <BookmarksViewHeader isArchived={isArchived} />
                         {errorMessage !== null || totalPages === null ? (
-                            <p className="form-error">
-                                {errorMessage}
-                            </p>
+                            <p className="form-error">{errorMessage}</p>
                         ) : (
                             <div className="flex flex-col items-center gap-2">
                                 <BookmarksList
