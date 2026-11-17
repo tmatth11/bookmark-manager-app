@@ -34,15 +34,10 @@ export default async function BookmarksList({
     }
 
     return (
-        <div className="flex flex-col justify-center">
-            <div className="grid auto-rows-fr grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {bookmarks.map((bookmark) => (
-                    <BookmarkCard 
-                        key={bookmark.id}
-                        bookmark={bookmark}
-                    />
-                ))}
-            </div>
+        <div className="grid auto-rows-fr grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {bookmarks.map((bookmark) => (
+                <BookmarkCard key={bookmark.id} bookmark={bookmark} />
+            ))}
         </div>
     );
 }
