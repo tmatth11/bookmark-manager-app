@@ -10,16 +10,13 @@ import {
 } from "@/components/ui/select";
 import { ArrowUpDown } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 export default function SortBy() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
 
-    const [sort, setSort] = useState<string | null>(
-        () => searchParams.get("sort-by") ?? "recently-added",
-    );
+    const sort = searchParams.get("sort-by") ?? "recently-added";
 
     const items = [
         { label: "Recently added", value: "recently-added" },
@@ -30,8 +27,6 @@ export default function SortBy() {
     const handleSort = (sortValue: string | null) => {
         if (!sortValue) return;
 
-        setSort(sortValue);
-
         const params = new URLSearchParams(searchParams);
         if (sortValue !== "recently-added") {
             params.set("sort-by", sortValue);
@@ -39,7 +34,8 @@ export default function SortBy() {
             params.delete("sort-by");
         }
 
-        replace(`${pathname}?${params.toString()}`);
+        const query = params.toString();
+        replace(query ? `${pathname}?${query}` : pathname);
     };
 
     return (

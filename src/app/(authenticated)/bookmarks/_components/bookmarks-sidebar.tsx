@@ -16,27 +16,16 @@ import {
 } from "@/components/ui/sidebar";
 import { Archive, House, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import TagList from "./tag-list";
 
 export default function BookmarksSideBar({
     ...props
 }: React.ComponentProps<typeof Sidebar>) {
     const searchParams = useSearchParams();
-    const router = useRouter();
-    const pathname = usePathname();
     const { setOpenMobile } = useSidebar();
 
     const isArchived = searchParams.get("archived") === "true";
-
-    const handleArchive = () => {
-        handleSidebarClose();
-
-        const params = new URLSearchParams(searchParams.toString());
-
-        params.set("archived", "true");
-
-        router.push(`${pathname}?${params.toString()}`);
-    };
 
     const handleSidebarClose = () => {
         setOpenMobile(false);
@@ -46,8 +35,8 @@ export default function BookmarksSideBar({
         <Sidebar {...props}>
             <SidebarHeader>
                 <div className="flex justify-between gap-2">
-                    <Logo 
-                        path="/bookmarks" 
+                    <Logo
+                        path="/bookmarks"
                         onSidebarClose={handleSidebarClose}
                     />
                     <Button
@@ -74,7 +63,6 @@ export default function BookmarksSideBar({
                         </SidebarMenuButton>
                         <SidebarMenuButton
                             isActive={isArchived}
-                            onClick={handleArchive}
                             render={<Link href="/bookmarks?archived=true" />}
                         >
                             <Archive />
@@ -85,7 +73,7 @@ export default function BookmarksSideBar({
                 <SidebarGroup>
                     <SidebarGroupLabel>TAGS</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        {/* TODO: Render tags */}
+                        <TagList />
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
