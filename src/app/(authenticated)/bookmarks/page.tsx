@@ -6,6 +6,7 @@ import BookmarksViewHeader from "./_components/bookmarks-view-header";
 import BookmarksList from "./_components/bookmarks-list";
 import { getBookmarksPages } from "@/lib/queries/bookmark";
 import { connection } from "next/server";
+import BookmarkPagination from "./_components/bookmark-pagination";
 
 export const instant = false;
 
@@ -55,9 +56,10 @@ export default async function BookmarksPage({
                                 {errorMessage}
                             </p>
                         ) : (
-                            <>
+                            <div className="flex flex-col items-center gap-2">
                                 <BookmarksList />
-                            </>
+                                <BookmarkPagination totalPages={totalPages} />
+                            </div>
                         )}
                     </main>
                 </div>
