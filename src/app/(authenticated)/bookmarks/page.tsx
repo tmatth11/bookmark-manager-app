@@ -57,7 +57,13 @@ export default async function BookmarksPage({
                             </p>
                         ) : (
                             <div className="flex flex-col items-center gap-2">
-                                <BookmarksList />
+                                <BookmarksList
+                                    isArchived={isArchived}
+                                    sortBy={sortBy}
+                                    query={query}
+                                    currentPage={currentPage}
+                                    tags={tags}
+                                />
                                 <BookmarkPagination totalPages={totalPages} />
                             </div>
                         )}
