@@ -1,5 +1,6 @@
 "use server";
 
+import { createClient } from "@/services/supabase/server";
 import * as cheerio from "cheerio";
 
 export async function fetchMetadata(targetUrl: string) {
@@ -63,4 +64,55 @@ export async function fetchMetadata(targetUrl: string) {
             error: errorMessage,
         };
     }
+}
+
+const ITEMS_PER_PAGE = 10;
+
+export async function getBookmarksPages(
+    isArchived: boolean,
+    query: string,
+    tags: string[],
+) {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
+        return {
+            data: null,
+            errorMessage: "Error: No user has been found.",
+        };
+    }
+
+    let bookmarkPagesQuery = supabase
+        .from("bookmark")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("is_archived", isArchived);
+
+    if (tags.length > 0) {
+        bookmarkPagesQuery = bookmarkPagesQuery.in("tag", tags);
+    }
+
+    if (query !== "") {
+        bookmarkPagesQuery = bookmarkPagesQuery.ilike("title", `%${query}%`);
+    }
+
+    const { count: bookmarkCount, error: countError } =
+        await bookmarkPagesQuery;
+
+    if (countError || bookmarkCount === null) {
+        return {
+            data: null,
+            errorMessage: "Error: Unable to count bookmark pages.",
+        };
+    }
+
+    return {
+        data: Math.ceil(bookmarkCount / ITEMS_PER_PAGE),
+        errorMessage: null,
+    };
 }

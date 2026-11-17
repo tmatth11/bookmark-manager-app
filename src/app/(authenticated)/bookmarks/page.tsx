@@ -4,6 +4,8 @@ import Footer from "@/app/_components/footer";
 import MenuBar from "./_components/menu-bar";
 import BookmarksViewHeader from "./_components/bookmarks-view-header";
 import BookmarksList from "./_components/bookmarks-list";
+import { getBookmarksPages } from "@/lib/queries/bookmark";
+import { connection } from "next/server";
 
 export const instant = false;
 
@@ -18,14 +20,27 @@ export default async function BookmarksPage({
         tag?: string | string[];
     }>;
 }) {
+    await connection();
+
     const userSearchParams = await searchParams;
 
     const isArchived = userSearchParams?.archived === "true";
+
     const sortBy = userSearchParams?.["sort-by"] || "recently-added";
-    const query = userSearchParams?.query || "";
+
+    const rawQuery = userSearchParams?.query || "";
+    const query = rawQuery.trim();
+
     const currentPage = Number(userSearchParams?.page) || 1;
+
     const rawTag = userSearchParams?.tag;
     const tags = Array.isArray(rawTag) ? rawTag : rawTag ? [rawTag] : [];
+
+    const { data: totalPages, errorMessage } = await getBookmarksPages(
+        isArchived,
+        query,
+        tags,
+    );
 
     return (
         <div className="mx-auto w-full max-w-[1920px]">
@@ -35,7 +50,15 @@ export default async function BookmarksPage({
                     <MenuBar />
                     <main className="bg-secondary flex min-h-dvh flex-col px-4 py-8 sm:px-6 lg:px-8">
                         <BookmarksViewHeader isArchived={isArchived} />
-                        <BookmarksList />
+                        {errorMessage !== null || totalPages !== null ? (
+                            <p className="form-error">
+                                {errorMessage}
+                            </p>
+                        ) : (
+                            <>
+                                <BookmarksList />
+                            </>
+                        )}
                     </main>
                 </div>
             </SidebarProvider>
