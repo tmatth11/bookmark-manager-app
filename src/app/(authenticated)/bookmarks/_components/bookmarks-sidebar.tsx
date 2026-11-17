@@ -47,8 +47,8 @@ export default function BookmarksSideBar({
         <Sidebar {...props}>
             <SidebarHeader>
                 <div className="flex justify-between gap-2">
-                    <Logo 
-                        path="/bookmarks" 
+                    <Logo
+                        path="/bookmarks"
                         onSidebarClose={handleSidebarClose}
                     />
                     <Button
