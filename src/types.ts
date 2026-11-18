@@ -30,6 +30,7 @@ export interface Tag {
 
 export interface Bookmark {
     id: string;
+    userId: string;
     createdAt: string;
     pageUrl: string;
     title: string;

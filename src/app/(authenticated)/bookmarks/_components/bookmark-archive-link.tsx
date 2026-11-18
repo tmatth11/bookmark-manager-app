@@ -8,10 +8,9 @@ export default function BookmarkArchiveLink({
     bookmark
 }: {
     bookmark: Bookmark;
-    currentPage: number;
 }) {
     const handleArchive = async () => {
-        await updateArchive(bookmark.id);
+        await updateArchive(bookmark.id, bookmark.userId);
     };
 
     return (

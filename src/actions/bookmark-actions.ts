@@ -1,5 +1,6 @@
 "use server";
 
+import { getBookmarksPages } from "@/lib/queries/bookmark";
 import { createClient } from "@/services/supabase/server";
 import { AddBookmarkState } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -121,7 +122,7 @@ export async function addBookmark(
     redirect("/bookmarks");
 }
 
-export async function updateVisit(bookmarkId: string) {
+export async function updateVisit(bookmarkId: string, ownerId: string) {
     const supabase = await createClient();
 
     const {
@@ -130,6 +131,10 @@ export async function updateVisit(bookmarkId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        return;
+    }
+
+    if (ownerId !== user.id) {
         return;
     }
 
@@ -161,7 +166,7 @@ export async function updateVisit(bookmarkId: string) {
     revalidatePath("/bookmarks");
 }
 
-export async function updateArchive(bookmarkId: string) {
+export async function updateArchive(bookmarkId: string, ownerId: string) {
     const supabase = await createClient();
 
     const {
@@ -170,6 +175,10 @@ export async function updateArchive(bookmarkId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        return;
+    }
+
+    if (ownerId !== user.id) {
         return;
     }
 
@@ -201,12 +210,14 @@ export async function updateArchive(bookmarkId: string) {
 
     revalidatePath("/bookmarks");
 
-    const redirectPath = updatedArchiveStatus ? "/bookmarks?archived=true" : "/bookmarks";
+    const redirectPath = updatedArchiveStatus
+        ? "/bookmarks?archived=true"
+        : "/bookmarks";
 
     redirect(redirectPath);
 }
 
-export async function togglePin(bookmarkId: string) {
+export async function togglePin(bookmarkId: string, ownerId: string) {
     const supabase = await createClient();
 
     const {
@@ -218,14 +229,16 @@ export async function togglePin(bookmarkId: string) {
         return;
     }
 
-    const {
-        data: bookmarkPinStatus,
-        error: getBookmarkPinStatusError,
-    } = await supabase
-        .from("bookmark")
-        .select("is_pinned")
-        .eq("id", bookmarkId)
-        .single();
+    if (ownerId !== user.id) {
+        return;
+    }
+
+    const { data: bookmarkPinStatus, error: getBookmarkPinStatusError } =
+        await supabase
+            .from("bookmark")
+            .select("is_pinned")
+            .eq("id", bookmarkId)
+            .single();
 
     if (!bookmarkPinStatus || getBookmarkPinStatusError) {
         return;
@@ -245,4 +258,69 @@ export async function togglePin(bookmarkId: string) {
     }
 
     revalidatePath("/bookmarks");
+}
+
+export async function deleteBookmark(
+    bookmarkId: string,
+    ownerId: string,
+    currentPage: number,
+    isArchived: boolean,
+    query: string,
+    tags: string[],
+    sortBy: string,
+) {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (!user || error) {
+        return;
+    }
+
+    if (ownerId !== user.id) {
+        return;
+    }
+
+    const { error: deleteError } = await supabase
+        .from("bookmark")
+        .delete()
+        .eq("id", bookmarkId);
+
+    if (deleteError) {
+        return;
+    }
+
+    revalidatePath("/bookmarks");
+
+    const { data: totalPages, errorMessage } = await getBookmarksPages(
+        isArchived,
+        query,
+        tags,
+    );
+
+    if (!totalPages || errorMessage) {
+        redirect("/bookmarks");
+    }
+
+    if (currentPage > totalPages && totalPages > 0) {
+        const params = new URLSearchParams();
+        if (query) {
+            params.set("query", query);
+        }
+
+        params.set("sort-by", sortBy);
+
+        if (isArchived) {
+            params.set("archived", "true");
+        }
+        tags.forEach((tag) => {
+            params.append("tag", tag);
+        });
+        params.set("page", totalPages.toString());
+
+        redirect(`/bookmarks?${params.toString()}`);
+    }
 }

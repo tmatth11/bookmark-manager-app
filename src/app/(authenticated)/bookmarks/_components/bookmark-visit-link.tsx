@@ -11,7 +11,7 @@ export default function BookmarkVisitLink({
     bookmark: Bookmark;
 }) {
     const handleVisit = async () => {
-        await updateVisit(bookmark.id);
+        await updateVisit(bookmark.id, bookmark.userId);
     };
 
     return (

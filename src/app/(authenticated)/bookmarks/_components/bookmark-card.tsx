@@ -21,6 +21,7 @@ import Image from "next/image";
 import BookmarkVisitLink from "./bookmark-visit-link";
 import BookmarkArchiveLink from "./bookmark-archive-link";
 import BookmarkPin from "./bookmark-pin";
+import DeleteBookmarkButton from "./delete-bookmark-button";
 
 export default function BookmarkCard({
     bookmark,
@@ -66,8 +67,11 @@ export default function BookmarkCard({
                                 Bookmark actions
                             </DropdownMenuLabel>
                             <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
-                            <BookmarkArchiveLink bookmark={bookmark} currentPage={currentPage} />
+                            <DeleteBookmarkButton
+                                bookmark={bookmark}
+                                currentPage={currentPage}
+                            />
+                            <BookmarkArchiveLink bookmark={bookmark} />
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>

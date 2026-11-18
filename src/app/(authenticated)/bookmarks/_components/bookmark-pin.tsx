@@ -7,7 +7,7 @@ import { Pin } from "lucide-react";
 
 export default function BookmarkPin({ bookmark }: { bookmark: Bookmark }) {
     const handleTogglePin = async () => {
-        await togglePin(bookmark.id);
+        await togglePin(bookmark.id, bookmark.userId);
     }
 
     return (

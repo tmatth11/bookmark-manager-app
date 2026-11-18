@@ -18,10 +18,14 @@ import { Archive, House, X } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import TagList from "./tag-list";
+import { Tag } from "@/types";
 
 export default function BookmarksSideBar({
+    bookmarkTags,
     ...props
-}: React.ComponentProps<typeof Sidebar>) {
+}: React.ComponentProps<typeof Sidebar> & {
+    bookmarkTags: Tag[];
+}) {
     const searchParams = useSearchParams();
     const { setOpenMobile } = useSidebar();
 
@@ -73,7 +77,7 @@ export default function BookmarksSideBar({
                 <SidebarGroup>
                     <SidebarGroupLabel>TAGS</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <TagList />
+                        <TagList bookmarkTags={bookmarkTags} />
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>

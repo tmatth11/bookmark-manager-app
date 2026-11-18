@@ -7,6 +7,8 @@ import BookmarksList from "./_components/bookmarks-list";
 import { getBookmarksPages } from "@/lib/queries/bookmark";
 import { connection } from "next/server";
 import BookmarkPagination from "./_components/bookmark-pagination";
+import { getTags } from "@/lib/queries/tag";
+import { Tag } from "@/types";
 
 export const instant = false;
 
@@ -43,10 +45,17 @@ export default async function BookmarksPage({
         tags,
     );
 
+    const { data: fetchedTags } = await getTags();
+
+    let bookmarkTags: Tag[] = [];
+    if (fetchedTags) {
+        bookmarkTags = fetchedTags;
+    }
+
     return (
         <div className="mx-auto w-full max-w-[1920px]">
             <SidebarProvider>
-                <BookmarksSideBar className="relative h-full border-r" />
+                <BookmarksSideBar bookmarkTags={bookmarkTags} className="relative h-full border-r" />
                 <div className="w-full">
                     <MenuBar />
                     <main className="bg-secondary flex min-h-dvh flex-col px-2 py-8 md:px-4 lg:px-6">
