@@ -3,10 +3,8 @@ import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
 } from "@/components/ui/card";
 import {
     DropdownMenu,
@@ -21,6 +19,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { Bookmark } from "@/types";
 import { Calendar, Clock, EllipsisVertical, Eye, Pin } from "lucide-react";
 import Image from "next/image";
+import BookmarkVisitLink from "./bookmark-visit-link";
 
 export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
     const createdAtDate = new Date(bookmark.createdAt);
@@ -49,10 +48,7 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
                     className="h-12.5 w-12.5 shrink-0 rounded-md border object-cover"
                     unoptimized
                 />
-                <div className="h-full min-w-0 flex-1 overflow-y-auto pr-1 break-all">
-                    <CardTitle>{bookmark.title}</CardTitle>
-                    <CardDescription>{bookmark.pageUrl}</CardDescription>
-                </div>
+                <BookmarkVisitLink bookmark={bookmark} />
                 <DropdownMenu>
                     <DropdownMenuTrigger render={<Button variant="outline" />}>
                         <EllipsisVertical />
@@ -100,7 +96,10 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
                     </div>
                 </div>
                 <Toggle className={"shrink-0"} pressed={bookmark.isPinned}>
-                    <Pin size={16} fill={bookmark.isPinned ? "white" : "none"} />
+                    <Pin
+                        size={16}
+                        fill={bookmark.isPinned ? "white" : "none"}
+                    />
                 </Toggle>
             </CardFooter>
         </Card>

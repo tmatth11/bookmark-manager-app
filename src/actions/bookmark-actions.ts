@@ -61,7 +61,7 @@ export async function addBookmark(
             user_id: user.id,
             page_url: validatedFields.data.pageUrl,
             title: validatedFields.data.title,
-            description: validatedFields.data.description
+            description: validatedFields.data.description,
         })
         .select()
         .single();
@@ -119,4 +119,44 @@ export async function addBookmark(
 
     revalidatePath("/bookmarks");
     redirect("/bookmarks");
+}
+
+export async function updateVisit(bookmarkId: string) {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (!user || error) {
+        return;
+    }
+
+    const { data: bookmarkVisits, error: getBookmarkVisitsError } =
+        await supabase
+            .from("bookmark")
+            .select("visits")
+            .eq("id", bookmarkId)
+            .single();
+
+    if (!bookmarkVisits || getBookmarkVisitsError) {
+        return;
+    }
+
+    const updatedVisits = bookmarkVisits.visits + 1;
+
+    const { error: updateVisitError } = await supabase
+        .from("bookmark")
+        .update({
+            visits: updatedVisits,
+            visited_at: new Date().toISOString(),
+        })
+        .eq("id", bookmarkId);
+    
+    if (updateVisitError) {
+        return;
+    }
+
+    revalidatePath("/bookmarks");
 }
