@@ -205,3 +205,44 @@ export async function updateArchive(bookmarkId: string) {
 
     redirect(redirectPath);
 }
+
+export async function togglePin(bookmarkId: string) {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (!user || error) {
+        return;
+    }
+
+    const {
+        data: bookmarkPinStatus,
+        error: getBookmarkPinStatusError,
+    } = await supabase
+        .from("bookmark")
+        .select("is_pinned")
+        .eq("id", bookmarkId)
+        .single();
+
+    if (!bookmarkPinStatus || getBookmarkPinStatusError) {
+        return;
+    }
+
+    const updatedPinStatus = !bookmarkPinStatus.is_pinned;
+
+    const { error: updatePinError } = await supabase
+        .from("bookmark")
+        .update({
+            is_pinned: updatedPinStatus,
+        })
+        .eq("id", bookmarkId);
+
+    if (updatePinError) {
+        return;
+    }
+
+    revalidatePath("/bookmarks");
+}

@@ -15,12 +15,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { Toggle } from "@/components/ui/toggle";
 import { Bookmark } from "@/types";
-import { Calendar, Clock, EllipsisVertical, Eye, Pin } from "lucide-react";
+import { Calendar, Clock, EllipsisVertical, Eye } from "lucide-react";
 import Image from "next/image";
 import BookmarkVisitLink from "./bookmark-visit-link";
 import BookmarkArchiveLink from "./bookmark-archive-link";
+import BookmarkPin from "./bookmark-pin";
 
 export default function BookmarkCard({
     bookmark,
@@ -103,12 +103,7 @@ export default function BookmarkCard({
                         <span>{formattedCreatedAtDate}</span>
                     </div>
                 </div>
-                <Toggle className={"shrink-0"} pressed={bookmark.isPinned}>
-                    <Pin
-                        size={16}
-                        fill={bookmark.isPinned ? "white" : "none"}
-                    />
-                </Toggle>
+                <BookmarkPin bookmark={bookmark} />
             </CardFooter>
         </Card>
     );
