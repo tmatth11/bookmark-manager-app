@@ -39,17 +39,17 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
     }
 
     return (
-        <Card className="h-64 w-64 md:h-58 md:w-58">
-            <CardHeader className="flex items-center gap-2">
+        <Card className="mx-auto flex aspect-square w-full max-w-[320px] flex-col gap-0 overflow-hidden p-0">
+            <CardHeader className="flex h-[30%] shrink-0 items-center gap-2 px-4 py-2">
                 <Image
                     src={bookmark.iconUrl}
                     width={50}
                     height={50}
                     alt="Bookmark image"
-                    className="h-12.5 w-12.5 rounded-md border object-cover"
+                    className="h-12.5 w-12.5 shrink-0 rounded-md border object-cover"
                     unoptimized
                 />
-                <div className="flex flex-col break-all">
+                <div className="h-full min-w-0 flex-1 overflow-y-auto pr-1 break-all">
                     <CardTitle>{bookmark.title}</CardTitle>
                     <CardDescription>{bookmark.pageUrl}</CardDescription>
                 </div>
@@ -68,8 +68,8 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </CardHeader>
-            <Separator />
-            <CardContent className="overflow-y-auto">
+            <Separator className={"shrink-0"} />
+            <CardContent className="h-[calc(55%-1px)] shrink-0 overflow-y-auto px-4 py-2">
                 <p className="mb-2 text-xs">{bookmark.description}</p>
                 <div className="flex w-full flex-wrap justify-start gap-2">
                     {bookmark.tags.map((tag) => (
@@ -84,8 +84,8 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
                     ))}
                 </div>
             </CardContent>
-            <CardFooter className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
+            <CardFooter className="flex h-[15%] shrink-0 items-center justify-between border-t px-4 py-2 text-xs">
+                <div className="flex shrink-0 items-center gap-2">
                     <div className="flex items-center gap-1">
                         <Eye size={16} />
                         <span>{bookmark.visits}</span>
@@ -99,8 +99,8 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
                         <span>{formattedCreatedAtDate}</span>
                     </div>
                 </div>
-                <Toggle pressed={bookmark.isPinned}>
-                    <Pin fill={bookmark.isPinned ? "white" : "none"} />
+                <Toggle className={"shrink-0"} pressed={bookmark.isPinned}>
+                    <Pin size={16} fill={bookmark.isPinned ? "white" : "none"} />
                 </Toggle>
             </CardFooter>
         </Card>
