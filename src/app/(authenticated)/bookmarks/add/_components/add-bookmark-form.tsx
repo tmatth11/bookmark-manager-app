@@ -23,7 +23,6 @@ export default function AddBookmarkForm() {
     const [metadataLoading, setMetadataLoading] = useState(false);
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [iconUrl, setIconUrl] = useState<string>("");
     const [newTag, setNewTag] = useState<string>("");
     const [tags, setTags] = useState<Set<string>>(new Set());
 
@@ -58,7 +57,6 @@ export default function AddBookmarkForm() {
 
         setTitle(metadata.title);
         setDescription(metadata.description);
-        setIconUrl(metadata.iconUrl);
         setMetadataLoading(false);
     };
 
@@ -162,21 +160,6 @@ export default function AddBookmarkForm() {
                         Page description is optional.
                     </FieldDescription>
                     {state?.errors?.description?.[0] && <p className="form-error">{state.errors.description[0]}</p>}
-                </Field>
-                <Field>
-                    <FieldLabel htmlFor="icon-url">Page icon URL</FieldLabel>
-                    <Input
-                        id="icon-url"
-                        name="icon-url"
-                        type="text"
-                        value={iconUrl}
-                        placeholder="Enter page icon URL"
-                        onChange={(e) => setIconUrl(e.target.value)}
-                    />
-                    <FieldDescription>
-                        Page icon URL is optional.
-                    </FieldDescription>
-                    {state?.errors?.iconUrl?.[0] && <p className="form-error">{state.errors.iconUrl[0]}</p>}
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="new-tag">New tag</FieldLabel>
