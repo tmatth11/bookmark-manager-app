@@ -142,6 +142,7 @@ export async function getBookmarks(
                 .select(
                     `
                       id,
+                      user_id,
                       created_at,
                       page_url,
                       title,
@@ -158,6 +159,7 @@ export async function getBookmarks(
             : supabase.from("bookmark").select(
                 `
                   id,
+                  user_id,
                   created_at,
                   page_url,
                   title,
@@ -235,6 +237,7 @@ export async function getBookmarks(
 
         return {
             id: bookmark.id,
+            userId: bookmark.user_id,
             createdAt: bookmark.created_at,
             pageUrl: bookmark.page_url,
             title: bookmark.title,
