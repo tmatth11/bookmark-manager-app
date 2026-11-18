@@ -37,6 +37,7 @@ export interface Bookmark {
     iconUrl: string;
     visitedAt: string | null;
     visits: number;
+    isArchived: boolean;
     isPinned: boolean;
     tags: {
         id: string;
