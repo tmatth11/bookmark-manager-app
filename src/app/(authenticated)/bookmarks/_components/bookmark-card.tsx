@@ -20,8 +20,15 @@ import { Bookmark } from "@/types";
 import { Calendar, Clock, EllipsisVertical, Eye, Pin } from "lucide-react";
 import Image from "next/image";
 import BookmarkVisitLink from "./bookmark-visit-link";
+import BookmarkArchiveLink from "./bookmark-archive-link";
 
-export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
+export default function BookmarkCard({
+    bookmark,
+    currentPage,
+}: {
+    bookmark: Bookmark;
+    currentPage: number;
+}) {
     const createdAtDate = new Date(bookmark.createdAt);
     const formattedCreatedAtDate = createdAtDate.toLocaleDateString("en-GB", {
         day: "numeric",
@@ -60,6 +67,7 @@ export default function BookmarkCard({ bookmark }: { bookmark: Bookmark }) {
                             </DropdownMenuLabel>
                             <DropdownMenuItem>Edit</DropdownMenuItem>
                             <DropdownMenuItem>Delete</DropdownMenuItem>
+                            <BookmarkArchiveLink bookmark={bookmark} currentPage={currentPage} />
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -153,10 +153,55 @@ export async function updateVisit(bookmarkId: string) {
             visited_at: new Date().toISOString(),
         })
         .eq("id", bookmarkId);
-    
+
     if (updateVisitError) {
         return;
     }
 
     revalidatePath("/bookmarks");
+}
+
+export async function updateArchive(bookmarkId: string) {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (!user || error) {
+        return;
+    }
+
+    const {
+        data: bookmarkArchiveStatus,
+        error: getBookmarkArchiveStatusError,
+    } = await supabase
+        .from("bookmark")
+        .select("is_archived")
+        .eq("id", bookmarkId)
+        .single();
+
+    if (!bookmarkArchiveStatus || getBookmarkArchiveStatusError) {
+        return;
+    }
+
+    const updatedArchiveStatus = !bookmarkArchiveStatus.is_archived;
+
+    const { error: updateArchiveError } = await supabase
+        .from("bookmark")
+        .update({
+            is_archived: updatedArchiveStatus,
+        })
+        .eq("id", bookmarkId);
+
+    if (updateArchiveError) {
+        return;
+    }
+
+    revalidatePath("/bookmarks");
+
+    const redirectPath = updatedArchiveStatus ? "/bookmarks?archived=true" : "/bookmarks";
+
+    redirect(redirectPath);
 }

@@ -53,7 +53,7 @@ export async function fetchMetadata(targetUrl: string) {
     }
 }
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 3;
 
 export async function getBookmarksPages(
     isArchived: boolean,
@@ -148,6 +148,7 @@ export async function getBookmarks(
                       description,
                       visited_at,
                       visits,
+                      is_archived,
                       is_pinned,
                       all_tags:bookmark_tag(tag(id, name)),
                       filter_tags:bookmark_tag!inner(tag!inner(name))
@@ -163,6 +164,7 @@ export async function getBookmarks(
                   description,
                   visited_at,
                   visits,
+                  is_archived,
                   is_pinned,
                   all_tags:bookmark_tag(tag(id, name))
               `,
@@ -241,6 +243,7 @@ export async function getBookmarks(
             visitedAt: bookmark.visited_at,
             visits: bookmark.visits,
             isPinned: bookmark.is_pinned,
+            isArchived: bookmark.is_archived,
             tags: bookmark.all_tags
                 .map((bt) => bt.tag)
                 .filter((tag): tag is { id: string; name: string } => tag !== null),
