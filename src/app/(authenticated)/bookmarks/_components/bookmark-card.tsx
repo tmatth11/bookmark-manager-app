@@ -15,9 +15,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { Toggle } from "@/components/ui/toggle";
 import { Bookmark } from "@/types";
-import { Calendar, Clock, EllipsisVertical, Eye, Pin } from "lucide-react";
+import { Calendar, Clock, EllipsisVertical, Eye } from "lucide-react";
 import Image from "next/image";
 import BookmarkVisitLink from "./bookmark-visit-link";
 import BookmarkArchiveLink from "./bookmark-archive-link";
