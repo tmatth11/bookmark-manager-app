@@ -27,17 +27,17 @@ export default async function EditBookmarkPage({
 
     const bookmarkId = result.data;
 
-    const { data: bookmark, errorMessage: bookmarkError } =
+    const { data: fetchedBookmark, errorMessage: fetchBookmarkError } =
         await getBookmark(bookmarkId);
 
-    if (!bookmark || bookmarkError) {
+    if (!fetchedBookmark || fetchBookmarkError) {
         notFound();
     }
 
     return (
         <>
             <TopBar />
-            <AddBookmarkView />
+            <AddBookmarkView bookmark={fetchedBookmark} />
             <Footer />
         </>
     );

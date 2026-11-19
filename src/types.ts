@@ -12,16 +12,6 @@ export interface UpdateUsernameState {
     success?: boolean;
 }
 
-export type AddBookmarkState = {
-    errors?: {
-        pageUrl?: string[];
-        title?: string[];
-        description?: string[];
-        tags?: string[];
-    };
-    errorMessage?: string;
-} | null;
-
 export interface Tag {
     id: string;
     name: string;
@@ -56,3 +46,15 @@ export interface FetchedBookmark {
         name: string;
     }[];
 }
+
+export type BookmarkFormState = {
+    errors?: {
+        id?: string[];
+        userId?: string[];
+        pageUrl?: string[];
+        title?: string[];
+        description?: string[];
+        tags?: string[];
+    };
+    errorMessage?: string;
+} | null;

@@ -2,7 +2,7 @@
 
 import { getBookmarksPages } from "@/lib/queries/bookmark";
 import { createClient } from "@/services/supabase/server";
-import { AddBookmarkState } from "@/types";
+import { BookmarkFormState } from "@/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import z from "zod";
@@ -24,9 +24,9 @@ const addBookmarkSchema = z.object({
 });
 
 export async function addBookmark(
-    prevState: AddBookmarkState,
+    prevState: BookmarkFormState,
     formData: FormData,
-): Promise<AddBookmarkState> {
+): Promise<BookmarkFormState> {
     const supabase = await createClient();
 
     const {
@@ -323,4 +323,132 @@ export async function deleteBookmark(
 
         redirect(`/bookmarks?${params.toString()}`);
     }
+}
+
+const editBookmarkSchema = addBookmarkSchema.extend({
+    id: z.string().min(1, "Bookmark ID is required."),
+    userId: z.string().min(1, "User ID is required."),
+});
+
+export async function editBookmark(
+    prevState: BookmarkFormState,
+    formData: FormData,
+) {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    // Only allow authenticated users to add bookmarks
+    if (!user || error) {
+        return {
+            errorMessage: "Error: User must be logged in to add bookmarks.",
+        };
+    }
+
+    // Validate form fields
+    const validatedFields = editBookmarkSchema.safeParse({
+        id: formData.get("bookmark-id"),
+        userId: formData.get("user-id"),
+        pageUrl: formData.get("page-url"),
+        title: formData.get("title"),
+        description: formData.get("description"),
+        tags: formData.getAll("tags"),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: z.flattenError(validatedFields.error).fieldErrors,
+            errorMessage: "Error: Missing or invalid fields.",
+        };
+    }
+
+    const { id, userId, pageUrl, title, description, tags } =
+        validatedFields.data;
+
+    // Only allow owner to update bookmark
+    if (userId !== user.id) {
+        return {
+            errorMessage: "Error: User doesn't own bookmark.",
+        };
+    }
+
+    // Update bookmark in bookmark table
+    const { data: updatedBookmark, error: updateBookmarkError } = await supabase
+        .from("bookmark")
+        .update({
+            page_url: pageUrl,
+            title: title,
+            description: description,
+        })
+        .eq("id", id)
+        .select()
+        .single();
+
+    if (!updatedBookmark || updateBookmarkError) {
+        return {
+            errorMessage: "Error: Unable to update bookmark in database.",
+        };
+    }
+
+    // Delete existing bookmark_tags
+    const { error: deleteTagsError } = await supabase
+        .from("bookmark_tag")
+        .delete()
+        .eq("bookmark_id", updatedBookmark.id);
+
+    if (deleteTagsError) {
+        return {
+            errorMessage: "Error: Unable to update bookmark tags.",
+        };
+    }
+
+    if (tags.length === 0) {
+        revalidatePath("/bookmarks");
+        redirect("/bookmarks");
+    }
+
+    const uniqueTags = Array.from(new Set(tags));
+
+    // Upsert tags to tag table
+    const { data: upsertedTags, error: upsertTagsError } = await supabase
+        .from("tag")
+        .upsert(
+            uniqueTags.map((name) => ({
+                user_id: user.id,
+                name,
+            })),
+            {
+                onConflict: "user_id, name",
+                ignoreDuplicates: false,
+            },
+        )
+        .select("id, name");
+
+    if (upsertTagsError || !upsertedTags) {
+        return {
+            errorMessage: "Error: Unable to save tags to database.",
+        };
+    }
+
+    // Insert fresh bookmark_tags
+    const { error: addBookmarkTagsError } = await supabase
+        .from("bookmark_tag")
+        .insert(
+            upsertedTags.map((tag) => ({
+                bookmark_id: updatedBookmark.id,
+                tag_id: tag.id,
+            })),
+        );
+
+    if (addBookmarkTagsError) {
+        return {
+            errorMessage: "Error: Unable to link updated tags to bookmark.",
+        };
+    }
+
+    revalidatePath("/bookmarks");
+    redirect("/bookmarks");
 }
