@@ -45,3 +45,14 @@ export interface Bookmark {
         name: string;
     }[];
 }
+
+export interface FetchedBookmark {
+    id: string;
+    userId: string;
+    pageUrl: string;
+    title: string;
+    description: string | null;
+    tags: {
+        name: string;
+    }[];
+}

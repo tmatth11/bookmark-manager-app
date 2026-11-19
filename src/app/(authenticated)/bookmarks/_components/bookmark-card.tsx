@@ -22,6 +22,7 @@ import BookmarkVisitLink from "./bookmark-visit-link";
 import BookmarkArchiveLink from "./bookmark-archive-link";
 import BookmarkPin from "./bookmark-pin";
 import DeleteBookmarkButton from "./delete-bookmark-button";
+import Link from "next/link";
 
 export default function BookmarkCard({
     bookmark,
@@ -66,7 +67,16 @@ export default function BookmarkCard({
                             <DropdownMenuLabel>
                                 Bookmark actions
                             </DropdownMenuLabel>
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <DropdownMenuItem
+                                render={
+                                    <Link
+                                        href={`/bookmarks/edit/${bookmark.id}`}
+                                        className="cursor-pointer"
+                                    >
+                                        Edit
+                                    </Link>
+                                }
+                            />
                             <DeleteBookmarkButton
                                 bookmark={bookmark}
                                 currentPage={currentPage}
