@@ -1,6 +1,6 @@
 "use client";
 
-import { addBookmark } from "@/actions/bookmark-actions";
+import { addBookmark, editBookmark } from "@/actions/bookmark-actions";
 import { Button } from "@/components/ui/button";
 import {
     Field,
@@ -13,20 +13,32 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { fetchMetadata } from "@/lib/queries/bookmark";
+import { FetchedBookmark } from "@/types";
 import { X } from "lucide-react";
 import React, { useActionState } from "react";
 import { useState } from "react";
 
-export default function AddBookmarkForm() {
-    const [pageUrl, setPageUrl] = useState<string>("");
+export default function AddBookmarkForm({
+    bookmark,
+}: {
+    bookmark?: FetchedBookmark;
+}) {
+    const [pageUrl, setPageUrl] = useState<string>(bookmark?.pageUrl ?? "");
     const [metadataError, setMetadataError] = useState<string | null>(null);
     const [metadataLoading, setMetadataLoading] = useState(false);
-    const [title, setTitle] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
+    const [title, setTitle] = useState<string>(bookmark?.title ?? "");
+    const [description, setDescription] = useState<string>(
+        bookmark?.description ?? "",
+    );
     const [newTag, setNewTag] = useState<string>("");
-    const [tags, setTags] = useState<Set<string>>(new Set());
+    const [tags, setTags] = useState<Set<string>>(
+        () => new Set(bookmark?.tags.map((tag) => tag.name) ?? []),
+    );
 
-    const [state, formAction, isPending] = useActionState(addBookmark, null);
+    const isEditMode = Boolean(bookmark);
+    const actionToUse = isEditMode ? editBookmark : addBookmark;
+
+    const [state, formAction, isPending] = useActionState(actionToUse, null);
 
     const handleMetadataError = (errorMessage: string) => {
         setMetadataError(errorMessage);
@@ -95,7 +107,17 @@ export default function AddBookmarkForm() {
 
     return (
         <form action={formAction} className="mt-4 w-full max-w-md">
-            {state?.errorMessage && <p className="form-error mb-2">{state.errorMessage}</p>}
+            {state?.errorMessage && (
+                <p className="form-error mb-2">{state.errorMessage}</p>
+            )}
+            {bookmark && <Input type="hidden" name="bookmark-id" value={bookmark.id} />}
+            {bookmark && <Input type="hidden" name="user-id" value={bookmark.userId} />}
+            {state?.errors?.id?.[0] && (
+                <p className="form-error mb-2">{state.errors.id[0]}</p>
+            )}
+            {state?.errors?.userId?.[0] && (
+                <p className="form-error mb-2">{state.errors.userId[0]}</p>
+            )}
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="page-url">
@@ -111,13 +133,17 @@ export default function AddBookmarkForm() {
                         onKeyDown={handleEnterMetadata}
                         required
                     />
-                    {state?.errors?.pageUrl?.[0] && <p className="form-error">{state.errors.pageUrl[0]}</p>}
+                    {state?.errors?.pageUrl?.[0] && (
+                        <p className="form-error">{state.errors.pageUrl[0]}</p>
+                    )}
                 </Field>
                 <Field>
                     <Button
                         type="button"
                         variant="outline"
-                        disabled={metadataLoading || pageUrl === "" || isPending}
+                        disabled={
+                            metadataLoading || pageUrl === "" || isPending
+                        }
                         onClick={handleMetadata}
                     >
                         {metadataLoading
@@ -143,7 +169,9 @@ export default function AddBookmarkForm() {
                         onChange={(e) => setTitle(e.target.value)}
                         required
                     />
-                    {state?.errors?.title?.[0] && <p className="form-error">{state.errors.title[0]}</p>}
+                    {state?.errors?.title?.[0] && (
+                        <p className="form-error">{state.errors.title[0]}</p>
+                    )}
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="description">
@@ -159,7 +187,11 @@ export default function AddBookmarkForm() {
                     <FieldDescription>
                         Page description is optional.
                     </FieldDescription>
-                    {state?.errors?.description?.[0] && <p className="form-error">{state.errors.description[0]}</p>}
+                    {state?.errors?.description?.[0] && (
+                        <p className="form-error">
+                            {state.errors.description[0]}
+                        </p>
+                    )}
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="new-tag">New tag</FieldLabel>
@@ -173,7 +205,9 @@ export default function AddBookmarkForm() {
                         onKeyDown={handleEnterTag}
                     />
                     <FieldDescription>Tags are optional.</FieldDescription>
-                    {state?.errors?.tags?.[0] && <p className="form-error">{state.errors.tags[0]}</p>}
+                    {state?.errors?.tags?.[0] && (
+                        <p className="form-error">{state.errors.tags[0]}</p>
+                    )}
                 </Field>
                 <Field>
                     <Button
@@ -224,7 +258,10 @@ export default function AddBookmarkForm() {
                     <Button
                         type="submit"
                         disabled={
-                            pageUrl === "" || title === "" || metadataLoading || isPending
+                            pageUrl === "" ||
+                            title === "" ||
+                            metadataLoading ||
+                            isPending
                         }
                     >
                         Submit

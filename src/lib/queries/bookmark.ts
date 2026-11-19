@@ -218,43 +218,108 @@ export async function getBookmarks(
         };
     }
 
-    
-    const formattedBookmarks = await Promise.all(bookmarks.map(async (bookmark) => {
-        let iconUrl =
-            "https://www.google.com/s2/favicons?domain=" +
-            encodeURIComponent(bookmark.page_url) +
-            "&sz=128";
+    const formattedBookmarks = await Promise.all(
+        bookmarks.map(async (bookmark) => {
+            let iconUrl =
+                "https://www.google.com/s2/favicons?domain=" +
+                encodeURIComponent(bookmark.page_url) +
+                "&sz=128";
 
-        try {
-            const response = await fetch(iconUrl);
+            try {
+                const response = await fetch(iconUrl);
 
-            if (!response.ok && response.status !== 404) {
+                if (!response.ok && response.status !== 404) {
+                    iconUrl = "/blank-image.jpg";
+                }
+            } catch {
                 iconUrl = "/blank-image.jpg";
             }
-        } catch {
-            iconUrl = "/blank-image.jpg";
-        }
 
-        return {
-            id: bookmark.id,
-            userId: bookmark.user_id,
-            createdAt: bookmark.created_at,
-            pageUrl: bookmark.page_url,
-            title: bookmark.title,
-            description: bookmark.description,
-            iconUrl: iconUrl,
-            visitedAt: bookmark.visited_at,
-            visits: bookmark.visits,
-            isPinned: bookmark.is_pinned,
-            isArchived: bookmark.is_archived,
-            tags: bookmark.all_tags
-                .map((bt) => bt.tag)
-                .filter((tag): tag is { id: string; name: string } => tag !== null),
-        }
-    }));
+            return {
+                id: bookmark.id,
+                userId: bookmark.user_id,
+                createdAt: bookmark.created_at,
+                pageUrl: bookmark.page_url,
+                title: bookmark.title,
+                description: bookmark.description,
+                iconUrl: iconUrl,
+                visitedAt: bookmark.visited_at,
+                visits: bookmark.visits,
+                isPinned: bookmark.is_pinned,
+                isArchived: bookmark.is_archived,
+                tags: bookmark.all_tags
+                    .map((bt) => bt.tag)
+                    .filter(
+                        (tag): tag is { id: string; name: string } =>
+                            tag !== null,
+                    ),
+            };
+        }),
+    );
 
     return {
         data: formattedBookmarks,
+        errorMessage: null,
+    };
+}
+
+export async function getBookmark(bookmarkId: string) {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
+        return {
+            data: null,
+            errorMessage: "Error: No user has been found.",
+        };
+    }
+
+    const { data: fetchedBookmark, error: fetchBookmarkError } = await supabase
+        .from("bookmark")
+        .select(
+            `
+            id,
+            user_id,
+            page_url,
+            title,
+            description,
+            all_tags:bookmark_tag(tag(id, name))
+        `,
+        )
+        .eq("id", bookmarkId)
+        .single();
+
+    if (!fetchedBookmark || fetchBookmarkError) {
+        return {
+            data: null,
+            errorMessage: "Error: Bookmark cannot be found.",
+        };
+    }
+
+    if (fetchedBookmark.user_id !== user.id) {
+        return {
+            data: null,
+            errorMessage: "Error: User doesn't own bookmark.",
+        };
+    }
+
+    const formattedBookmark = {
+        id: fetchedBookmark.id,
+        userId: fetchedBookmark.user_id,
+        pageUrl: fetchedBookmark.page_url,
+        title: fetchedBookmark.title,
+        description: fetchedBookmark.description,
+        tags: fetchedBookmark.all_tags.map((bookmarkTag) => ({
+            name: bookmarkTag.tag.name,
+        })),
+    };
+
+    return {
+        data: formattedBookmark,
         errorMessage: null,
     };
 }
