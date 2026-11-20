@@ -1,6 +1,10 @@
 import { createClient } from "@/services/supabase/server";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
+import Hero from "./_components/hero";
+import CallToAction from "./_components/call-to-action";
+import Features from "./_components/features";
+import Testimonials from "./_components/testimonials";
 
 export const instant = false;
 
@@ -17,8 +21,11 @@ export default async function HomePage() {
     }
 
     return (
-        <div className="main-layout">
-            <p>HomePage works!</p>
+        <div className="main-layout min-h-screen">
+            <Hero />
+            <Features />
+            <Testimonials />
+            <CallToAction />
         </div>
     );
 }

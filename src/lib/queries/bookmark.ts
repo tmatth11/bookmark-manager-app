@@ -53,7 +53,7 @@ export async function fetchMetadata(targetUrl: string) {
     }
 }
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 12;
 
 export async function getBookmarksPages(
     isArchived: boolean,

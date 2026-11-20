@@ -17,7 +17,7 @@ export default function Logo({ onLinksClose, onSidebarClose, path }: {
             className="link-hover flex items-center gap-2"
             onClick={handleClick}
         >
-            <div className="bg-primary shrink-0 rounded-md p-1 text-white">
+            <div className="filled-icon">
                 <Bookmark />
             </div>
             <span className="text-center font-semibold">Bookmark Manager</span>
