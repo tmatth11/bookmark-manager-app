@@ -20,7 +20,7 @@ export default function Features() {
                                 <SunMoon size={32} />
                             </div>
                             <span className="feature-card-title">
-                                Dark/Light Theme
+                                Dark/Light Modes
                             </span>
                         </div>
                     </CardHeader>
@@ -35,7 +35,7 @@ export default function Features() {
                                 <ArrowUpDown size={32} />
                             </div>
                             <span className="feature-card-title">
-                                Sort/Filter
+                                Sorting/Filtering
                             </span>
                         </div>
                     </CardHeader>
