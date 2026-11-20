@@ -143,6 +143,26 @@
     .top-bar {
         @apply bg-card p-4 border-b;
     }
+
+    .feature-card {
+        @apply h-full;
+    }
+
+    .feature-card-header {
+        @apply flex items-center gap-2;
+    }
+
+    .feature-card-title {
+        @apply text-center font-semibold text-lg;
+    }
+    
+    .feature-card-description {
+        @apply text-muted-foreground;
+    }
+
+    .filled-icon {
+        @apply bg-primary shrink-0 rounded-md p-1 text-white w-fit;
+    }
 }
 
 @layer utilities {
