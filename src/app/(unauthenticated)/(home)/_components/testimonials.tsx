@@ -7,7 +7,7 @@ export default function Tesimonials() {
         {
             name: "G-Man",
             initials: "GM",
-            role: "Research Associate",
+            role: "Mysterious Entity",
             avatarSrc: "/g-man.webp",
             stars: 5,
             quote: "This will be very useful for my employers...",
@@ -31,7 +31,7 @@ export default function Tesimonials() {
     ];
 
     return (
-        <section className="mx-auto max-w-5xl px-4 pb-16 md:pb-24">
+        <section className="mx-auto max-w-5xl px-4 pb-24 md:pb-32 lg:pb-40">
             <div className="mb-10 text-center">
                 <h2 className="mb-4 text-3xl font-semibold md:text-4xl">
                     Testimonials

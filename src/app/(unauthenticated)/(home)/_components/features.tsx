@@ -3,7 +3,7 @@ import { ArrowUpDown, Columns3, SunMoon } from "lucide-react";
 
 export default function Features() {
     return (
-        <section className="mx-auto max-w-5xl px-4 pb-16 md:pb-24">
+        <section className="mx-auto max-w-5xl px-4 pb-24 md:pb-32 lg:pb-40">
             <div className="mb-10 text-center">
                 <h2 className="mb-4 text-3xl font-semibold md:text-4xl">
                     Features
