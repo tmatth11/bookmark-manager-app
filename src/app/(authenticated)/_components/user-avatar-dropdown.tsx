@@ -11,6 +11,7 @@ import { connection } from "next/server";
 import Link from "next/link";
 import LogOutButton from "./log-out-button";
 import UserAvatarImage from "./user-avatar-image";
+import { Button } from "@/components/ui/button";
 
 export const instant = false;
 
@@ -29,18 +30,27 @@ export default async function UserAvatarDropdown() {
         <DropdownMenu>
             <DropdownMenuTrigger
                 render={
-                    <UserAvatarImage
-                        avatarFallback={avatarFallback}
-                        avatarUrl={avatarUrl}
-                    />
+                    <Button variant="ghost" aria-label="Open profile actions" />
                 }
-            />
+            >
+                <UserAvatarImage
+                    avatarFallback={avatarFallback}
+                    avatarUrl={avatarUrl}
+                />
+            </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Profile actions</DropdownMenuLabel>
                     {profile && (
                         <DropdownMenuItem
-                            render={<Link href="/edit-profile" className="cursor-pointer">Edit profile</Link>}
+                            render={
+                                <Link
+                                    href="/edit-profile"
+                                    className="cursor-pointer"
+                                >
+                                    Edit profile
+                                </Link>
+                            }
                         />
                     )}
                     <LogOutButton />
