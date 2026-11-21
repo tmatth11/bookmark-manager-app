@@ -18,7 +18,7 @@ import { X } from "lucide-react";
 import React, { useActionState } from "react";
 import { useState } from "react";
 
-export default function AddBookmarkForm({
+export default function BookmarkForm({
     bookmark,
 }: {
     bookmark?: FetchedBookmark;

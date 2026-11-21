@@ -1,15 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import AddBookmarkForm from "./add-bookmark-form";
 import { FetchedBookmark } from "@/types";
+import BookmarkForm from "./bookmark-form";
 
-export default function UpdateUsernameWrapper({
+export default function BookmarkFormWrapper({
     bookmark,
 }: {
     bookmark?: FetchedBookmark;
 }) {
     const pathname = usePathname();
 
-    return <AddBookmarkForm key={pathname} bookmark={bookmark} />;
+    return <BookmarkForm key={pathname} bookmark={bookmark} />;
 }

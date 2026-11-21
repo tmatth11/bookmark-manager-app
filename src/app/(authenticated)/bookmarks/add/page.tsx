@@ -1,7 +1,7 @@
 import Footer from "@/app/_components/footer";
 import TopBar from "../../_components/top-bar";
-import AddBookmarkView from "./_components/add-bookmark-view";
 import { Metadata } from "next";
+import BookmarkFormView from "../_components/bookmark-form-view";
 
 export const metadata: Metadata = {
     title: "Add Bookmark",
@@ -12,7 +12,7 @@ export default function AddBookmarkPage() {
     return (
         <>
             <TopBar />
-            <AddBookmarkView />
+            <BookmarkFormView />
             <Footer />
         </>
     );
