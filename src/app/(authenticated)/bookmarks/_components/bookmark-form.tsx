@@ -125,6 +125,9 @@ export default function BookmarkForm({
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="page-url">
+                        <span className="text-destructive" aria-hidden="true">
+                            *
+                        </span>
                         Page URL (the full URL)
                     </FieldLabel>
                     <Input
@@ -163,7 +166,12 @@ export default function BookmarkForm({
                     </FieldDescription>
                 </Field>
                 <Field>
-                    <FieldLabel htmlFor="title">Page title</FieldLabel>
+                    <FieldLabel htmlFor="title">
+                        <span className="text-destructive" aria-hidden="true">
+                            *
+                        </span>
+                        Page title
+                    </FieldLabel>
                     <Input
                         id="title"
                         name="title"
