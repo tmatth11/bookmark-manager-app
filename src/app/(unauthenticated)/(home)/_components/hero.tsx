@@ -7,7 +7,7 @@ export default function Hero() {
             <div className="flex flex-col items-center gap-4 text-center">
                 <div className="max-w-md">
                     <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                        Never <span className="text-primary">lose</span> another
+                        Never <span className="text-purple-600">lose</span> another
                         URL again
                     </h1>
                     <p className="text-muted-foreground">

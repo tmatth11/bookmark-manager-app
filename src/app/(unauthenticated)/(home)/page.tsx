@@ -5,6 +5,13 @@ import Hero from "./_components/hero";
 import CallToAction from "./_components/call-to-action";
 import Features from "./_components/features";
 import Testimonials from "./_components/testimonials";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Home",
+    description:
+        "Stop losing track of the links of your favorite websites. Keep all of them in one place instead",
+};
 
 export const instant = false;
 
