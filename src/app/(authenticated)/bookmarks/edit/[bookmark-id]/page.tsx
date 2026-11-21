@@ -5,6 +5,12 @@ import z from "zod";
 import AddBookmarkView from "../../add/_components/add-bookmark-view";
 import Footer from "@/app/_components/footer";
 import { connection } from "next/server";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Edit Bookmark",
+    description: "Fill out the form below to your bookmark.",
+};
 
 export const instant = false;
 
