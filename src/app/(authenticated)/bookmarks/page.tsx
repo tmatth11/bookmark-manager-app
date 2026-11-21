@@ -10,11 +10,7 @@ import BookmarkPagination from "./_components/bookmark-pagination";
 import { getTags } from "@/lib/queries/tag";
 import { Tag } from "@/types";
 
-export const instant = false;
-
-export default async function BookmarksPage({
-    searchParams,
-}: {
+interface BookmarksPageProps {
     searchParams?: Promise<{
         archived?: string;
         "sort-by"?: string;
@@ -22,7 +18,24 @@ export default async function BookmarksPage({
         query?: string;
         tag?: string | string[];
     }>;
-}) {
+}
+
+export async function generateMetadata({ searchParams }: BookmarksPageProps) {
+    const userSearchParams = await searchParams;
+
+    const isArchived = userSearchParams?.archived === "true";
+
+    return {
+        title: `${isArchived ? "Archived" : "All"} Bookmarks`,
+        description: `View all your${isArchived &&  " archived"} bookmarks, or filter out the ones you don't need.`
+    };
+}
+
+export const instant = false;
+
+export default async function BookmarksPage({
+    searchParams,
+}: BookmarksPageProps) {
     await connection();
 
     const userSearchParams = await searchParams;
@@ -55,7 +68,10 @@ export default async function BookmarksPage({
     return (
         <div className="mx-auto w-full max-w-[1920px]">
             <SidebarProvider>
-                <BookmarksSideBar bookmarkTags={bookmarkTags} className="relative h-full border-r" />
+                <BookmarksSideBar
+                    bookmarkTags={bookmarkTags}
+                    className="relative h-full border-r"
+                />
                 <div className="w-full">
                     <MenuBar />
                     <main className="bg-secondary flex min-h-dvh flex-col px-2 py-8 md:px-4 lg:px-6">
