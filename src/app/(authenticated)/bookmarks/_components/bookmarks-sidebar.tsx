@@ -68,6 +68,7 @@ export default function BookmarksSideBar({
                         <SidebarMenuButton
                             isActive={isArchived}
                             render={<Link href="/bookmarks?archived=true" />}
+                            onClick={handleSidebarClose}
                         >
                             <Archive />
                             <span>Archived</span>
