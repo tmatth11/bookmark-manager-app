@@ -2,9 +2,15 @@ import TopBar from "@/app/(authenticated)/_components/top-bar";
 import { getBookmark } from "@/lib/queries/bookmark";
 import { notFound } from "next/navigation";
 import z from "zod";
-import AddBookmarkView from "../../add/_components/add-bookmark-view";
 import Footer from "@/app/_components/footer";
 import { connection } from "next/server";
+import { Metadata } from "next";
+import BookmarkFormView from "../../_components/bookmark-form-view";
+
+export const metadata: Metadata = {
+    title: "Edit Bookmark",
+    description: "Fill out the form below to your bookmark.",
+};
 
 export const instant = false;
 
@@ -37,7 +43,7 @@ export default async function EditBookmarkPage({
     return (
         <>
             <TopBar />
-            <AddBookmarkView bookmark={fetchedBookmark} />
+            <BookmarkFormView bookmark={fetchedBookmark} />
             <Footer />
         </>
     );
