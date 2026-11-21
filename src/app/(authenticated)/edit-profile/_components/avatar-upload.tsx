@@ -75,10 +75,10 @@ export default function AvatarUpload({ profile }: { profile: Profile }) {
     };
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col mb-4">
             <h4 className="text-lg font-semibold">Upload Avatar</h4>
-            <div className="mt-2 flex flex-col items-center gap-2 md:flex-row">
-                <Avatar size="lg">
+            <div className="mt-2 flex flex-col items-center gap-2">
+                <Avatar className={"size-36"}>
                     {avatarUrl && <AvatarImage src={avatarUrl} />}
                     <AvatarFallback>{avatarFallback}</AvatarFallback>
                 </Avatar>

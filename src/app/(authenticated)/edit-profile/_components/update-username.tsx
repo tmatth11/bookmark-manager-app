@@ -14,7 +14,7 @@ export default function UpdateUsername({ profile }: { profile: Profile }) {
     const [username, setUsername] = useState(profile.username);
 
     return (
-        <form action={formAction} className="flex flex-col items-center gap-2">
+        <form action={formAction} className="flex flex-col gap-2">
             <h4 className="text-lg font-semibold">Update Username</h4>
             <FieldGroup>
                 <Field>
