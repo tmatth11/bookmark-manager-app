@@ -110,8 +110,12 @@ export default function BookmarkForm({
             {state?.errorMessage && (
                 <p className="form-error mb-2">{state.errorMessage}</p>
             )}
-            {bookmark && <Input type="hidden" name="bookmark-id" value={bookmark.id} />}
-            {bookmark && <Input type="hidden" name="user-id" value={bookmark.userId} />}
+            {bookmark && (
+                <Input type="hidden" name="bookmark-id" value={bookmark.id} />
+            )}
+            {bookmark && (
+                <Input type="hidden" name="user-id" value={bookmark.userId} />
+            )}
             {state?.errors?.id?.[0] && (
                 <p className="form-error mb-2">{state.errors.id[0]}</p>
             )}
@@ -153,7 +157,7 @@ export default function BookmarkForm({
                     {metadataError && (
                         <p className="form-error">{metadataError}</p>
                     )}
-                    <FieldDescription>
+                    <FieldDescription className="text-accent-foreground">
                         Not everything will fill out automatically. You can
                         always fill in at least the title to add a bookmark.
                     </FieldDescription>
@@ -184,7 +188,7 @@ export default function BookmarkForm({
                         placeholder="Enter page description"
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <FieldDescription>
+                    <FieldDescription className="text-accent-foreground">
                         Page description is optional.
                     </FieldDescription>
                     {state?.errors?.description?.[0] && (
@@ -204,7 +208,9 @@ export default function BookmarkForm({
                         onChange={(e) => setNewTag(e.target.value)}
                         onKeyDown={handleEnterTag}
                     />
-                    <FieldDescription>Tags are optional.</FieldDescription>
+                    <FieldDescription className="text-accent-foreground">
+                        Tags are optional.
+                    </FieldDescription>
                     {state?.errors?.tags?.[0] && (
                         <p className="form-error">{state.errors.tags[0]}</p>
                     )}
