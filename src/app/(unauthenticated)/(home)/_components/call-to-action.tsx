@@ -6,7 +6,7 @@ export default function CallToAction() {
         <section className="bg-muted/50 mx-auto w-full max-w-4xl rounded-md px-4 text-center py-14">
             <div className="flex flex-col items-center gap-4">
                 <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                    Ready to organize your favorite websites?
+                    Ready to keep track of your favorite websites?
                 </h2>
                 <p>
                     Log in or sign up if you haven&apos;t already to get
