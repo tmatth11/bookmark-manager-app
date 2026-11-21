@@ -25,7 +25,7 @@ export default async function SignUpPage() {
 
     return (
         <div className="main-layout">
-            <div className="flex min-h-dvh flex-col items-center">
+            <div className="flex flex-col items-center">
                 <SignUpFormWrapper />
             </div>
         </div>

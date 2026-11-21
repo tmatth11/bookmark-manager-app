@@ -75,7 +75,7 @@ export default function LoginForm() {
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
-                <CardTitle>Log In</CardTitle>
+                <CardTitle>Log in</CardTitle>
                 <CardDescription>
                     Log in with your email and password.
                 </CardDescription>
@@ -108,7 +108,7 @@ export default function LoginForm() {
                         {error && <p className="form-error">{error}</p>}
                         <Field>
                             <Button type="submit" disabled={isFormInvalid}>
-                                Log In
+                                Log in
                             </Button>
                             <FieldDescription className="px-6 text-center">
                                 Don&apos;t have an account?{" "}
