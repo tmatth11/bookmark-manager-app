@@ -1,8 +1,8 @@
 import { Metadata } from "next";
-import SignUpForm from "./_components/sign-up-form";
 import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { createClient } from "@/services/supabase/server";
+import SignUpFormWrapper from "./_components/sign-up-form-wrapper";
 
 export const metadata: Metadata = {
     title: "Sign Up",
@@ -25,8 +25,8 @@ export default async function SignUpPage() {
 
     return (
         <div className="main-layout">
-            <div className="flex min-h-dvh flex-col items-center">
-                <SignUpForm />
+            <div className="flex flex-col items-center">
+                <SignUpFormWrapper />
             </div>
         </div>
     );

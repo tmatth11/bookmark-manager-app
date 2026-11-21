@@ -16,6 +16,7 @@ export default function Logo({ onLinksClose, onSidebarClose, path }: {
             href={path}
             className="link-hover flex items-center gap-2"
             onClick={handleClick}
+            title="Go back to bookmarks page"
         >
             <div className="filled-icon">
                 <Bookmark />

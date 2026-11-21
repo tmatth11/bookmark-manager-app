@@ -89,7 +89,7 @@ export default function SignUpForm() {
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
-                <CardTitle>Sign Up</CardTitle>
+                <CardTitle>Sign up</CardTitle>
                 <CardDescription>
                     Create an account using an email, username, and password.
                 </CardDescription>
@@ -149,7 +149,7 @@ export default function SignUpForm() {
                         <FieldGroup>
                             <Field>
                                 <Button type="submit" disabled={isFormInvalid}>
-                                    Create Account
+                                    Create account
                                 </Button>
                                 <FieldDescription className="px-6 text-center">
                                     Already have an account?{" "}

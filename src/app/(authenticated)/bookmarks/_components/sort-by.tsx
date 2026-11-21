@@ -39,11 +39,7 @@ export default function SortBy() {
     };
 
     return (
-        <Select
-            items={items}
-            value={sort}
-            onValueChange={handleSort}
-        >
+        <Select items={items} value={sort} onValueChange={handleSort}>
             <SelectTrigger>
                 <div className="flex items-center gap-2">
                     <ArrowUpDown />
@@ -54,7 +50,11 @@ export default function SortBy() {
                 <SelectGroup>
                     <SelectLabel>Sort by</SelectLabel>
                     {items.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
+                        <SelectItem
+                            className={"cursor-pointer"}
+                            key={item.value}
+                            value={item.value}
+                        >
                             {item.label}
                         </SelectItem>
                     ))}

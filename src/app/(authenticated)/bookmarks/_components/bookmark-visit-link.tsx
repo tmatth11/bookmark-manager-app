@@ -17,7 +17,7 @@ export default function BookmarkVisitLink({
     return (
         <Link
             href={bookmark.pageUrl}
-            className="h-full min-w-0 flex-1 overflow-y-auto pr-1 break-all cursor-pointer hover:underline"
+            className="h-full min-w-0 flex-1 overflow-y-auto pr-1 wrap-break-word cursor-pointer hover:underline"
             target="_blank"
             onClick={handleVisit}
         >

@@ -1,8 +1,8 @@
 import { Metadata } from "next";
-import LoginForm from "./_components/login-form";
 import { connection } from "next/server";
 import { createClient } from "@/services/supabase/server";
 import { redirect } from "next/navigation";
+import LoginFormWrapper from "./_components/login-form-wrapper";
 
 export const metadata: Metadata = {
     title: "Log In",
@@ -26,7 +26,7 @@ export default async function LoginPage() {
     return (
         <div className="main-layout">
             <div className="flex flex-col items-center">
-                <LoginForm />
+                <LoginFormWrapper />
             </div>
         </div>
     );
