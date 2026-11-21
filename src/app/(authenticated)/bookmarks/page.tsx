@@ -27,7 +27,7 @@ export async function generateMetadata({ searchParams }: BookmarksPageProps) {
 
     return {
         title: `${isArchived ? "Archived" : "All"} Bookmarks`,
-        description: `View all your${isArchived &&  " archived"} bookmarks, or filter out the ones you don't need.`
+        description: `View all your${isArchived ?  " archived" : ""} bookmarks, or filter out the ones you don't need.`
     };
 }
 
