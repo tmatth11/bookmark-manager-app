@@ -68,21 +68,26 @@ export async function getBookmarksPages(
     } = await supabase.auth.getUser();
 
     if (error || !user) {
+        console.error("Authentication error:", error);
+
         return {
             data: null,
             errorMessage: "Error: No user has been found.",
         };
     }
 
+    // Determine whether to grab bookmark_tags or not
     const selectClause =
         tags.length > 0 ? "id, bookmark_tag!inner(tag!inner(name))" : "*";
 
+    // Build initial query to fetch bookmarks
     let bookmarkPagesQuery = supabase
         .from("bookmark")
         .select(selectClause, { count: "exact", head: true })
         .eq("user_id", user.id)
         .eq("is_archived", isArchived);
 
+    // Grab bookmarks with applied tags
     if (tags.length > 0) {
         bookmarkPagesQuery = bookmarkPagesQuery.in(
             "bookmark_tag.tag.name",
@@ -90,20 +95,25 @@ export async function getBookmarksPages(
         );
     }
 
+    // Filter bookmarks that fit search query
     if (query !== "") {
         bookmarkPagesQuery = bookmarkPagesQuery.ilike("title", `%${query}%`);
     }
 
+    // Count all remaining bookmarks
     const { count: bookmarkCount, error: countError } =
         await bookmarkPagesQuery;
 
     if (countError || bookmarkCount === null) {
+        console.error("Bookmark pages count error:", countError);
+
         return {
             data: null,
             errorMessage: "Error: Unable to count bookmark pages.",
         };
     }
 
+    // Return calculated number of pages
     return {
         data: Math.ceil(bookmarkCount / ITEMS_PER_PAGE),
         errorMessage: null,
@@ -125,16 +135,20 @@ export async function getBookmarks(
     } = await supabase.auth.getUser();
 
     if (error || !user) {
+        console.error("Authentication error:", error);
+
         return {
             data: null,
             errorMessage: "Error: No user has been found.",
         };
     }
 
+    // Calculate the start and end index of bookmarks
     const page = Math.max(1, currentPage || 1);
     const from = (page - 1) * ITEMS_PER_PAGE;
     const to = from + ITEMS_PER_PAGE - 1;
 
+    // Build query to fetch bookmarks based on whether user is filtering by tags or not
     let bookmarksQuery =
         tags.length > 0
             ? supabase
@@ -172,18 +186,22 @@ export async function getBookmarks(
               `,
             );
 
+    // Filter archive status
     bookmarksQuery = bookmarksQuery
         .eq("user_id", user.id)
         .eq("is_archived", isArchived);
 
+    // Filter by user search
     if (query !== "") {
         bookmarksQuery = bookmarksQuery.ilike("title", `%${query}%`);
     }
 
+    // Show pinned bookmarks first
     bookmarksQuery = bookmarksQuery.order("is_pinned", {
         ascending: false,
     });
 
+    // Sort by user-defined sort order
     switch (sortBy) {
     case "recently-visited":
         bookmarksQuery = bookmarksQuery.order("visited_at", {
@@ -204,20 +222,25 @@ export async function getBookmarks(
         break;
     }
 
+    // Show the bookmarks with the lowest ID's first
     bookmarksQuery = bookmarksQuery.order("id", {
         ascending: false,
     });
 
+    // Query bookmarks
     const { data: bookmarks, error: bookmarksError } =
         await bookmarksQuery.range(from, to);
 
     if (bookmarksError || !bookmarks) {
+        console.error("Get bookmarks error:", bookmarksError);
+
         return {
             data: null,
             errorMessage: "Error: Unable to select bookmarks.",
         };
     }
 
+    // Formatted bookmarks to be used in components
     const formattedBookmarks = await Promise.all(
         bookmarks.map(async (bookmark) => {
             let iconUrl =
@@ -225,6 +248,7 @@ export async function getBookmarks(
                 encodeURIComponent(bookmark.page_url) +
                 "&sz=128";
 
+            // Fetch most recent icon of bookmark
             try {
                 const response = await fetch(iconUrl);
 
@@ -272,12 +296,15 @@ export async function getBookmark(bookmarkId: string) {
     } = await supabase.auth.getUser();
 
     if (error || !user) {
+        console.error("Authentication error:", error);
+
         return {
             data: null,
             errorMessage: "Error: No user has been found.",
         };
     }
 
+    // Fetch bookmark using provided bookmark ID
     const { data: fetchedBookmark, error: fetchBookmarkError } = await supabase
         .from("bookmark")
         .select(
@@ -294,6 +321,8 @@ export async function getBookmark(bookmarkId: string) {
         .single();
 
     if (!fetchedBookmark || fetchBookmarkError) {
+        console.error("Fetch bookmark error:", fetchBookmarkError);
+
         return {
             data: null,
             errorMessage: "Error: Bookmark cannot be found.",
@@ -307,6 +336,7 @@ export async function getBookmark(bookmarkId: string) {
         };
     }
 
+    // Formatted bookmark to be used in components
     const formattedBookmark = {
         id: fetchedBookmark.id,
         userId: fetchedBookmark.user_id,

@@ -36,11 +36,14 @@ export async function addBookmark(
 
     // Only allow authenticated users to add bookmarks
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return {
             errorMessage: "Error: User must be logged in to add bookmarks.",
         };
     }
 
+    // Validate fields
     const validatedFields = addBookmarkSchema.safeParse({
         pageUrl: formData.get("page-url"),
         title: formData.get("title"),
@@ -68,6 +71,7 @@ export async function addBookmark(
         .single();
 
     if (!newBookmark || addBookmarkError) {
+        console.error("Add bookmark error:", addBookmarkError);
         return {
             errorMessage: "Error: Unable to add bookmark to database.",
         };
@@ -95,6 +99,8 @@ export async function addBookmark(
         .select();
 
     if (addTagsError) {
+        console.error("Add tags error:", addTagsError);
+
         return {
             errorMessage: "Error: Unable to add new tags to database.",
         };
@@ -112,6 +118,8 @@ export async function addBookmark(
             );
 
         if (addBookmarkTagsError) {
+            console.error("Add bookmark tags error:", addTagsError);
+
             return {
                 errorMessage: "Error: Unable to add bookmark tags to database.",
             };
@@ -131,13 +139,17 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
+    // Only allow owner of bookmark to update visit
     if (ownerId !== user.id) {
         return;
     }
 
+    // Get current number of bookmark visits
     const { data: bookmarkVisits, error: getBookmarkVisitsError } =
         await supabase
             .from("bookmark")
@@ -146,11 +158,15 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
             .single();
 
     if (!bookmarkVisits || getBookmarkVisitsError) {
+        console.error("Get bookmark visits error:", getBookmarkVisitsError);
+
         return;
     }
 
+    // Increase number of visits by 1
     const updatedVisits = bookmarkVisits.visits + 1;
 
+    // Update number of visits and last visited time in database
     const { error: updateVisitError } = await supabase
         .from("bookmark")
         .update({
@@ -160,6 +176,8 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
         .eq("id", bookmarkId);
 
     if (updateVisitError) {
+        console.error("Update bookmark visits error:", updateVisitError);
+
         return;
     }
 
@@ -175,13 +193,17 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
+    // Only allow owner of bookmark to update archive status
     if (ownerId !== user.id) {
         return;
     }
 
+    // Get current bookmark archive status in database
     const {
         data: bookmarkArchiveStatus,
         error: getBookmarkArchiveStatusError,
@@ -192,11 +214,15 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
         .single();
 
     if (!bookmarkArchiveStatus || getBookmarkArchiveStatusError) {
+        console.error("Get bookmark archive status error:", error);
+
         return;
     }
 
+    // Update bookmark archive status
     const updatedArchiveStatus = !bookmarkArchiveStatus.is_archived;
 
+    // Update bookmark archive status in database
     const { error: updateArchiveError } = await supabase
         .from("bookmark")
         .update({
@@ -205,6 +231,8 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
         .eq("id", bookmarkId);
 
     if (updateArchiveError) {
+        console.error("Update bookmark archive status error:", error);
+
         return;
     }
 
@@ -226,13 +254,17 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
+    // Only allow the owner of the bookmark to pin it
     if (ownerId !== user.id) {
         return;
     }
 
+    // Get current pinned status
     const { data: bookmarkPinStatus, error: getBookmarkPinStatusError } =
         await supabase
             .from("bookmark")
@@ -241,11 +273,18 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
             .single();
 
     if (!bookmarkPinStatus || getBookmarkPinStatusError) {
+        console.error(
+            "Get bookmark pin status error:",
+            getBookmarkPinStatusError,
+        );
+
         return;
     }
 
+    // Update pin status
     const updatedPinStatus = !bookmarkPinStatus.is_pinned;
 
+    // Update pin status in database
     const { error: updatePinError } = await supabase
         .from("bookmark")
         .update({
@@ -254,6 +293,8 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
         .eq("id", bookmarkId);
 
     if (updatePinError) {
+        console.error("Update bookmark pin error", updatePinError);
+
         return;
     }
 
@@ -277,24 +318,31 @@ export async function deleteBookmark(
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
+    // Only allow owner of bookmark to delete it
     if (ownerId !== user.id) {
         return;
     }
 
+    // Delete bookmark from database
     const { error: deleteError } = await supabase
         .from("bookmark")
         .delete()
         .eq("id", bookmarkId);
 
     if (deleteError) {
+        console.error("Delete bookmark error:", deleteError);
+
         return;
     }
 
     revalidatePath("/bookmarks");
 
+    // Get total number of pages
     const { data: totalPages, errorMessage } = await getBookmarksPages(
         isArchived,
         query,
@@ -305,6 +353,7 @@ export async function deleteBookmark(
         redirect("/bookmarks");
     }
 
+    // Update total number of pages if invalid
     if (currentPage > totalPages && totalPages > 0) {
         const params = new URLSearchParams();
         if (query) {
@@ -341,8 +390,10 @@ export async function editBookmark(
         error,
     } = await supabase.auth.getUser();
 
-    // Only allow authenticated users to add bookmarks
+    // Only allow authenticated users to edit bookmarks
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return {
             errorMessage: "Error: User must be logged in to add bookmarks.",
         };
@@ -365,6 +416,7 @@ export async function editBookmark(
         };
     }
 
+    // Extract validated data
     const { id, userId, pageUrl, title, description, tags } =
         validatedFields.data;
 
@@ -388,6 +440,8 @@ export async function editBookmark(
         .single();
 
     if (!updatedBookmark || updateBookmarkError) {
+        console.error("Update bookmark error:", updateBookmarkError);
+
         return {
             errorMessage: "Error: Unable to update bookmark in database.",
         };
@@ -400,6 +454,8 @@ export async function editBookmark(
         .eq("bookmark_id", updatedBookmark.id);
 
     if (deleteTagsError) {
+        console.error("Update bookmark error:", error);
+
         return {
             errorMessage: "Error: Unable to update bookmark tags.",
         };
@@ -428,6 +484,8 @@ export async function editBookmark(
         .select("id, name");
 
     if (upsertTagsError || !upsertedTags) {
+        console.error("Upsert tags error:", upsertTagsError);
+
         return {
             errorMessage: "Error: Unable to save tags to database.",
         };
@@ -444,6 +502,8 @@ export async function editBookmark(
         );
 
     if (addBookmarkTagsError) {
+        console.error("Add bookmark tags error:", addBookmarkTagsError);
+
         return {
             errorMessage: "Error: Unable to link updated tags to bookmark.",
         };

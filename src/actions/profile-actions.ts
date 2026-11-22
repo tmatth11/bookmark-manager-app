@@ -64,6 +64,8 @@ export async function updateUsername(
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return { error: "Error: Could not obtain current user information." };
     }
 
@@ -73,6 +75,7 @@ export async function updateUsername(
         return { error: "Error: Username was not provided." };
     }
 
+    // Update profile in database
     const { error: updateError } = await supabase
         .from("profile")
         .update({
@@ -81,6 +84,8 @@ export async function updateUsername(
         .eq("id", user.id);
     
     if (updateError) {
+        console.error("Update profile error:", updateError);
+
         return { error: "Error: Username could not be updated." };
     }
 
