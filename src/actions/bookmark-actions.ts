@@ -41,6 +41,7 @@ export async function addBookmark(
         };
     }
 
+    // Validate fields
     const validatedFields = addBookmarkSchema.safeParse({
         pageUrl: formData.get("page-url"),
         title: formData.get("title"),
@@ -134,10 +135,12 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
         return;
     }
 
+    // Only allow owner of bookmark to update visit
     if (ownerId !== user.id) {
         return;
     }
 
+    // Get current number of bookmark visits
     const { data: bookmarkVisits, error: getBookmarkVisitsError } =
         await supabase
             .from("bookmark")
@@ -149,8 +152,10 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
         return;
     }
 
+    // Increase number of visits by 1
     const updatedVisits = bookmarkVisits.visits + 1;
 
+    // Update number of visits and last visited time in database
     const { error: updateVisitError } = await supabase
         .from("bookmark")
         .update({
@@ -178,10 +183,12 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
         return;
     }
 
+    // Only allow owner of bookmark to update archive status
     if (ownerId !== user.id) {
         return;
     }
 
+    // Get current bookmark archive status in database
     const {
         data: bookmarkArchiveStatus,
         error: getBookmarkArchiveStatusError,
@@ -195,8 +202,10 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
         return;
     }
 
+    // Update bookmark archive status
     const updatedArchiveStatus = !bookmarkArchiveStatus.is_archived;
 
+    // Update bookmark archive status in database
     const { error: updateArchiveError } = await supabase
         .from("bookmark")
         .update({
@@ -229,10 +238,12 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
         return;
     }
 
+    // Only allow the owner of the bookmark to pin it
     if (ownerId !== user.id) {
         return;
     }
 
+    // Get current pinned status
     const { data: bookmarkPinStatus, error: getBookmarkPinStatusError } =
         await supabase
             .from("bookmark")
@@ -244,8 +255,10 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
         return;
     }
 
+    // Update pin status
     const updatedPinStatus = !bookmarkPinStatus.is_pinned;
 
+    // Update pin status in database
     const { error: updatePinError } = await supabase
         .from("bookmark")
         .update({
@@ -280,10 +293,12 @@ export async function deleteBookmark(
         return;
     }
 
+    // Only allow owner of bookmark to delete it
     if (ownerId !== user.id) {
         return;
     }
 
+    // Delete bookmark from database
     const { error: deleteError } = await supabase
         .from("bookmark")
         .delete()
@@ -295,6 +310,7 @@ export async function deleteBookmark(
 
     revalidatePath("/bookmarks");
 
+    // Get total number of pages
     const { data: totalPages, errorMessage } = await getBookmarksPages(
         isArchived,
         query,
@@ -305,6 +321,7 @@ export async function deleteBookmark(
         redirect("/bookmarks");
     }
 
+    // Update total number of pages if invalid
     if (currentPage > totalPages && totalPages > 0) {
         const params = new URLSearchParams();
         if (query) {
@@ -365,6 +382,7 @@ export async function editBookmark(
         };
     }
 
+    // Extract validated data
     const { id, userId, pageUrl, title, description, tags } =
         validatedFields.data;
 

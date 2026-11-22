@@ -19,6 +19,7 @@ export async function getTags() {
 
     const userId = user.id;
 
+    // Get tags belonging to current user
     const { data: tags, error: tagsError } = await supabase
         .from("tag")
         .select(
@@ -40,6 +41,7 @@ export async function getTags() {
         };
     }
 
+    // Format tags into array of tag ID, name, and count
     const formattedTags = tags.map((tag) => ({
         id: tag.id,
         name: tag.name,

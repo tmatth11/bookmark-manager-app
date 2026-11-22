@@ -18,6 +18,7 @@ export async function fetchCurrentProfile() {
 
     const userId = user.id;
 
+    // Get profile belonging to the current user
     const { data: profile, error: profileError } = await supabase
         .from("profile")
         .select()
@@ -32,6 +33,7 @@ export async function fetchCurrentProfile() {
 
     let signedAvatarUrl: string | null = null;
 
+    // Update avatar URL with new signed URL
     if (profile.avatar_path) {
         const { data, error: signError } = await supabase.storage
             .from("avatar")

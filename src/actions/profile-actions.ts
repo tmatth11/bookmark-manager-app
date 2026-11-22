@@ -73,6 +73,7 @@ export async function updateUsername(
         return { error: "Error: Username was not provided." };
     }
 
+    // Update profile in database
     const { error: updateError } = await supabase
         .from("profile")
         .update({
