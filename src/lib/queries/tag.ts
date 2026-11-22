@@ -11,6 +11,8 @@ export async function getTags() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
+        console.error("Authentication error:", userError);
+
         return {
             data: null,
             error: "Error: No user has been found.",
@@ -34,7 +36,7 @@ export async function getTags() {
         .eq("bookmark_tag.bookmark.user_id", userId);
 
     if (tagsError) {
-        console.error("tagsError =", tagsError);
+        console.error("Get tags error:", tagsError);
         return {
             data: null,
             error: "Error: Unable to fetch bookmark tags.",

@@ -36,6 +36,8 @@ export async function addBookmark(
 
     // Only allow authenticated users to add bookmarks
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return {
             errorMessage: "Error: User must be logged in to add bookmarks.",
         };
@@ -69,6 +71,7 @@ export async function addBookmark(
         .single();
 
     if (!newBookmark || addBookmarkError) {
+        console.error("Add bookmark error:", addBookmarkError);
         return {
             errorMessage: "Error: Unable to add bookmark to database.",
         };
@@ -96,6 +99,8 @@ export async function addBookmark(
         .select();
 
     if (addTagsError) {
+        console.error("Add tags error:", addTagsError);
+
         return {
             errorMessage: "Error: Unable to add new tags to database.",
         };
@@ -113,6 +118,8 @@ export async function addBookmark(
             );
 
         if (addBookmarkTagsError) {
+            console.error("Add bookmark tags error:", addTagsError);
+
             return {
                 errorMessage: "Error: Unable to add bookmark tags to database.",
             };
@@ -132,6 +139,8 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
@@ -149,6 +158,8 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
             .single();
 
     if (!bookmarkVisits || getBookmarkVisitsError) {
+        console.error("Get bookmark visits error:", getBookmarkVisitsError);
+
         return;
     }
 
@@ -165,6 +176,8 @@ export async function updateVisit(bookmarkId: string, ownerId: string) {
         .eq("id", bookmarkId);
 
     if (updateVisitError) {
+        console.error("Update bookmark visits error:", updateVisitError);
+
         return;
     }
 
@@ -180,6 +193,8 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
@@ -199,6 +214,8 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
         .single();
 
     if (!bookmarkArchiveStatus || getBookmarkArchiveStatusError) {
+        console.error("Get bookmark archive status error:", error);
+
         return;
     }
 
@@ -214,6 +231,8 @@ export async function updateArchive(bookmarkId: string, ownerId: string) {
         .eq("id", bookmarkId);
 
     if (updateArchiveError) {
+        console.error("Update bookmark archive status error:", error);
+
         return;
     }
 
@@ -235,6 +254,8 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
@@ -252,6 +273,11 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
             .single();
 
     if (!bookmarkPinStatus || getBookmarkPinStatusError) {
+        console.error(
+            "Get bookmark pin status error:",
+            getBookmarkPinStatusError,
+        );
+
         return;
     }
 
@@ -267,6 +293,8 @@ export async function togglePin(bookmarkId: string, ownerId: string) {
         .eq("id", bookmarkId);
 
     if (updatePinError) {
+        console.error("Update bookmark pin error", updatePinError);
+
         return;
     }
 
@@ -290,6 +318,8 @@ export async function deleteBookmark(
     } = await supabase.auth.getUser();
 
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return;
     }
 
@@ -305,6 +335,8 @@ export async function deleteBookmark(
         .eq("id", bookmarkId);
 
     if (deleteError) {
+        console.error("Delete bookmark error:", deleteError);
+
         return;
     }
 
@@ -358,8 +390,10 @@ export async function editBookmark(
         error,
     } = await supabase.auth.getUser();
 
-    // Only allow authenticated users to add bookmarks
+    // Only allow authenticated users to edit bookmarks
     if (!user || error) {
+        console.error("Authentication error:", error);
+
         return {
             errorMessage: "Error: User must be logged in to add bookmarks.",
         };
@@ -406,6 +440,8 @@ export async function editBookmark(
         .single();
 
     if (!updatedBookmark || updateBookmarkError) {
+        console.error("Update bookmark error:", updateBookmarkError);
+
         return {
             errorMessage: "Error: Unable to update bookmark in database.",
         };
@@ -418,6 +454,8 @@ export async function editBookmark(
         .eq("bookmark_id", updatedBookmark.id);
 
     if (deleteTagsError) {
+        console.error("Update bookmark error:", error);
+
         return {
             errorMessage: "Error: Unable to update bookmark tags.",
         };
@@ -446,6 +484,8 @@ export async function editBookmark(
         .select("id, name");
 
     if (upsertTagsError || !upsertedTags) {
+        console.error("Upsert tags error:", upsertTagsError);
+
         return {
             errorMessage: "Error: Unable to save tags to database.",
         };
@@ -462,6 +502,8 @@ export async function editBookmark(
         );
 
     if (addBookmarkTagsError) {
+        console.error("Add bookmark tags error:", addBookmarkTagsError);
+
         return {
             errorMessage: "Error: Unable to link updated tags to bookmark.",
         };

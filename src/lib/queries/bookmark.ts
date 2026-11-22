@@ -68,6 +68,8 @@ export async function getBookmarksPages(
     } = await supabase.auth.getUser();
 
     if (error || !user) {
+        console.error("Authentication error:", error);
+
         return {
             data: null,
             errorMessage: "Error: No user has been found.",
@@ -103,6 +105,8 @@ export async function getBookmarksPages(
         await bookmarkPagesQuery;
 
     if (countError || bookmarkCount === null) {
+        console.error("Bookmark pages count error:", countError);
+
         return {
             data: null,
             errorMessage: "Error: Unable to count bookmark pages.",
@@ -131,6 +135,8 @@ export async function getBookmarks(
     } = await supabase.auth.getUser();
 
     if (error || !user) {
+        console.error("Authentication error:", error);
+
         return {
             data: null,
             errorMessage: "Error: No user has been found.",
@@ -226,6 +232,8 @@ export async function getBookmarks(
         await bookmarksQuery.range(from, to);
 
     if (bookmarksError || !bookmarks) {
+        console.error("Get bookmarks error:", bookmarksError);
+
         return {
             data: null,
             errorMessage: "Error: Unable to select bookmarks.",
@@ -288,6 +296,8 @@ export async function getBookmark(bookmarkId: string) {
     } = await supabase.auth.getUser();
 
     if (error || !user) {
+        console.error("Authentication error:", error);
+
         return {
             data: null,
             errorMessage: "Error: No user has been found.",
@@ -311,6 +321,8 @@ export async function getBookmark(bookmarkId: string) {
         .single();
 
     if (!fetchedBookmark || fetchBookmarkError) {
+        console.error("Fetch bookmark error:", fetchBookmarkError);
+
         return {
             data: null,
             errorMessage: "Error: Bookmark cannot be found.",
