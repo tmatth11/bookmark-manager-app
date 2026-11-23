@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/helpers";
 import { Metadata } from "next";
 import { ThemeProvider } from "./_components/theme-provider";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -26,6 +27,7 @@ export default function MainLayout({ children }: LayoutProps<"/">) {
                     disableTransitionOnChange
                 >
                     {children}
+                    <Analytics />
                 </ThemeProvider>
             </body>
         </html>
