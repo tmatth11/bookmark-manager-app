@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# bookmark-manager-app
 
-## Getting Started
+This is a full-stack web application that allows you to manage bookmarks containing a URL, title, and description. It was inspired by this [challenge](https://www.frontendmentor.io/challenges/bookmark-manager-app) by Frontend Mentor.
 
-First, run the development server:
+You can try it [here](https://bookmark-manager-app-two.vercel.app/).
+
+<img src="cover-photo.png" alt="Header image" width="500" height="500">
+
+## Features
+
+- **Dark Mode**: Users can toggle between a dark mode and a light mode
+- **Sorting/Filtering**: Users can sort bookmarks by recently added, recently visited, or most visited
+- **Pagination**: Users can even bookmark their own pages of bookmarks
+
+## Core Technologies
+
+- **Front End**: Next.js, Tailwind CSS, shadcn/ui
+- **Back End**: Supabase, Server Actions
+
+## Installation
+
+### Prerequisites
+
+In order to run this project locally, you must have the following installed/set up:
+
+- [Node.js](https://nodejs.org/en)
+- pnpm (`npm install -g pnpm`)
+- [Docker Desktop Installation](https://docs.docker.com/desktop) (Necessary for using Supbase CLI)
+
+### Instructions
+
+1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/tmatth11/bookmark-manager-app.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate to the project's directory
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd bookmark-manager-app
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Install dependencies
 
-## Learn More
+```bash
+pnpm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open Docker Desktop
+5. Start Supabase services
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm supabase start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+6. Apply existing migrations
 
-## Deploy on Vercel
+```bash
+pnpm supabase db reset
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+7. Create local `.env.local` file
+8. Add this template to the `.env.local` file and insert the necessary values
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+9. Start the development server
+
+```bash
+pnpm dev
+```
