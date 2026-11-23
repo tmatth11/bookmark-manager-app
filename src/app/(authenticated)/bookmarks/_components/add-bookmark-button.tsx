@@ -6,6 +6,7 @@ export default function AddBookmarkButton() {
     return (
         <Link
             href="/bookmarks/add"
+            aria-label="Add bookmark"
             className={buttonVariants({
                 size: "lg",
                 variant: "default",
