@@ -59,8 +59,15 @@ export default function BookmarkCard({
                 />
                 <BookmarkVisitLink bookmark={bookmark} />
                 <DropdownMenu>
-                    <DropdownMenuTrigger render={<Button variant="outline" />}>
-                        <EllipsisVertical />
+                    <DropdownMenuTrigger
+                        render={
+                            <Button
+                                variant="outline"
+                                aria-label={`Bookmark actions for ${bookmark.title}`}
+                            />
+                        }
+                    >
+                        <EllipsisVertical aria-hidden="true" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuGroup>
