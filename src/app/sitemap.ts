@@ -1,4 +1,4 @@
-import { getDeploymentURL } from "@/lib/utils";
+import { getDeploymentURL } from "@/lib/helpers";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
