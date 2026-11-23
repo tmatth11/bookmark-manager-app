@@ -40,9 +40,9 @@ export default function SortBy() {
 
     return (
         <Select items={items} value={sort} onValueChange={handleSort}>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Sort by">
                 <div className="flex items-center gap-2">
-                    <ArrowUpDown />
+                    <ArrowUpDown aria-hidden="true" />
                     <span>Sort by</span>
                 </div>
             </SelectTrigger>
